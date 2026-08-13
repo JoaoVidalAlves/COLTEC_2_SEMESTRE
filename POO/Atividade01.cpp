@@ -4,25 +4,48 @@ using namespace std;
 
 int main()
 {
-int x = 0;
+float x = 1;
+float maiorNota = 0;
+float menorNota = 0;
+float mediaNotas = 0;
+int contador = 0;
 
-    do
+while (x > 0)
+{
+    cout << "Digite uma nota (menor que 0 encerra) encerra: ";
+    cin >> x;
+
+    if (x < 0)
     {
-        cout << "Digite uma nota (menor que 0 encerra) encerra: ";
-        cin >> x;
+        mediaNotas /= contador;
+        break;
+    }
 
-        if (x < 0)
-        {
-            cout << "Encerrando..." << endl;
-        }
-        else
-        {
-    
-            cout << "Nota valida!" << endl;
-        
-        }
+    mediaNotas += x;
+    contador++;
 
-    } while (x >= 0);
+    if (contador == 1)
+    {
+        menorNota = x;
+        maiorNota = menorNota;
+        continue;
+    }
+
+    if (x > maiorNota)
+    {
+        maiorNota = x;
+    }
+
+    if (x < menorNota)
+    {
+        menorNota = x;
+    }
+}    
+
+cout << "Maior nota: " << maiorNota << endl;
+cout << "Menor nota " << menorNota << endl;
+cout << "Media: " << mediaNotas << endl;
+cout << "Encerrando..." << endl;
 
     return 0;
 }
