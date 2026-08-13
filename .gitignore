@@ -1,0 +1,23 @@
+# Executáveis do Windows
+*.exe
+
+# Executáveis Linux
+*.out
+
+# Arquivos objeto
+*.o
+
+# Arquivos de depuração
+*.d
+
+# Pasta de build
+build/
+bin/
+obj/
+
+# Arquivos do VS Code
+.vscode/
+
+# Arquivos temporários
+*.tmp
+*.temp
