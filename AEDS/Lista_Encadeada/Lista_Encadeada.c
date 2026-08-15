@@ -275,7 +275,7 @@ typedef struct lista
     int tam;
 }Lista;
 
-void CriarLista(Lista* lista)
+void CriarLista(Lista *lista)
 {
     lista->inicio = NULL;
     lista->tam = 0;
@@ -360,6 +360,41 @@ void InserirNoMeio(Lista *lista, int num, int ant)
     }
 }
 
+void InserirOrdenado(Lista *lista, int num)
+{
+    No* aux, * novo = malloc(sizeof(No));
+
+    if (novo)
+    {
+        novo->valor = num;
+        if (lista->inicio == NULL)
+        {
+            novo->prox = NULL;
+            lista->inicio = novo;
+        }
+        else if (novo->valor < lista->inicio->valor)
+        {
+            novo->prox = lista->inicio;
+            lista->inicio = novo;
+        }
+        else
+        {
+            aux = lista->inicio;
+            while (aux->prox && novo->valor > aux->prox->valor)
+            {
+                aux = aux->prox;
+            }
+            novo->prox = aux->prox;
+            aux->prox = novo;
+        }
+        lista->tam++;
+    }
+    else
+    {
+        printf("Erro ao alocar memoria!")
+    }
+}
+
 void Imprimir(Lista lista)
 {
     No* no = lista.inicio;
@@ -373,7 +408,7 @@ void Imprimir(Lista lista)
     }
 }
 
-No* Removido(No** lista, int num)
+/*No* Removido(No** lista, int num)
 {
     No *aux, *remover, *anterior = NULL;
 
@@ -387,6 +422,35 @@ No* Removido(No** lista, int num)
         else 
         {
             aux = *lista;
+            while (aux && aux->valor != num)
+            {
+                anterior = aux;
+                aux = aux->prox;
+            }
+            if (aux)
+            {
+                remover = aux;
+                anterior->prox = remover->prox;
+            }
+        }
+    }
+    return remover;
+}*/
+
+No* Removido(Lista* lista, int num)
+{
+    No* aux, * remover = NULL, * anterior = NULL;
+
+    if (lista->inicio)
+    {
+        if (lista->inicio->valor == num)
+        {
+            remover = lista->inicio;
+            lista->inicio = remover->prox;
+        }
+        else
+        {
+            aux = lista->inicio;
             while (aux && aux->valor != num)
             {
                 anterior = aux;
@@ -461,11 +525,12 @@ void atvfacil1()
             "1 - Inserir Inicio\n\t"
             "2 - Inserir Meio\n\t"
             "3 - Inserir Fim\n\t"
-            "4 - Remover\n\t"
-            "5 - Buscar\n\t"
-            "6 - Destruir Lista\n\t"
-            "7 - Imprimir\n\t"
-            "Selecione: ", 0, 7);
+            "4 - Inserir Ordenado\n\t"
+            "5 - Remover\n\t"
+            "6 - Buscar\n\t"
+            "7 - Destruir Lista\n\t"
+            "8 - Imprimir\n\t"
+            "Selecione: ", 0, 8);
 
         switch (opcao)
         {
@@ -487,8 +552,13 @@ void atvfacil1()
             break;
         case 4:
             system(CLEAR_COMMAND);
+            valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
+            InserirOrdenado(&lista, valor);
+            break;
+        case 5:
+            system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
-            remover = Removido(&lista.inicio, valor);
+            remover = Removido(&lista, valor);
             
             if (remover)
             {
@@ -497,16 +567,16 @@ void atvfacil1()
                 free(remover);
             }
             break;
-        case 5:
+        case 6:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser encontrado: ", 1, 100);
             BuscaElemento(&lista, valor);
             break;
-        case 6:
+        case 7:
             system(CLEAR_COMMAND);
             DestruirLista(&lista);
             break;
-        case 7:
+        case 8:
             system(CLEAR_COMMAND);
             Imprimir(lista);
             break;
