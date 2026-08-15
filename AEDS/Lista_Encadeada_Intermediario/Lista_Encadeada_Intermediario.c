@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include <locale.h>
 
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"
@@ -74,109 +72,16 @@ void LerTexto(const char* mensagem, char texto[], int tamanho)
 }
 
 //DECLARAR PROTOTIPOS DO MENU E ATIVIDADES
-void menuFacil();
-void menuIntermediario();
-void menuDificil();
-
-void atvfacil1();
-void atvfacil2();
-void atvfacil3();
-void atvfacil4();
-void atvfacil5();
-
 void atvintermediario1();
 void atvintermediario2();
 void atvintermediario3();
 void atvintermediario4();
-void atvintermediario5();
-
-void atvdificil1();
-void atvdificil2();
-void atvdificil3();
-void atvdificil4();
-void atvdificil5();
-
-//PROTOTIPO DO MENU
-int selecionarDificuldade = 0;
 
 int main()
 {
     system(CLEAR_COMMAND);
 
-    selecionarDificuldade = LerNumero(
-        "EXERCICIOS DE LISTAS ENCADEADAS\n\n"
-        "Selecione a dificuldade\n"
-        "1 = FACIL\n"
-        "2 = INTERMEDIARIO\n"
-        "3 = DIFICIL\n"
-        "Selecione: ", 1, 3);
-
-    switch (selecionarDificuldade)
-    {
-    case 1:
-    {
-        system(CLEAR_COMMAND);
-        menuFacil();
-    }
-    break;
-
-    case 2:
-    {
-        system(CLEAR_COMMAND);
-        menuIntermediario();
-    }
-    break;
-
-    case 3:
-    {
-        system(CLEAR_COMMAND);
-        menuDificil();
-    }
-    break;
-
-    default:
-    {
-        printf("Selecione uma dificuldade valida.");
-    }
-    }
-    return 0;
-}
-
-//PROTOTIPO DAS DIFICULDADES
-void menuFacil()
-{
-    system(CLEAR_COMMAND);
-
-    selecionarDificuldade = LerNumero(
-        "EXERCICIOS FACEIS\n\n"
-        "1 = Lista Encadeada Simples\n"
-        "2 = Lista Encadeada Ordenada\n"
-        "Selecione: ", 1, 2);
-
-    switch (selecionarDificuldade)
-    {
-    case 1:
-    {
-        atvfacil1();
-    }
-    break;
-
-    case 2:
-    {
-        atvfacil2();
-    }
-    break;
-
-    default:
-    {
-        printf("Selecione um exercicio valido");
-    }
-    }
-}
-
-void menuIntermediario()
-{
-    system(CLEAR_COMMAND);
+    int selecionarDificuldade = 0;
 
     selecionarDificuldade = LerNumero(
         "EXERCICIOS INTERMEDIARIOS\n\n"
@@ -186,81 +91,38 @@ void menuIntermediario()
         "4 = Lista com No Cabeca\n"
         "Selecione: ", 1, 4);
 
-    switch (selecionarDificuldade) {
-    case 1:
-    {
-        atvintermediario1();
-    }
-    break;
-
-    case 2:
-    {
-        atvintermediario2();
-    }
-    break;
-
-    case 3:
-    {
-        atvintermediario3();
-    }
-    break;
-
-    case 4:
-    {
-        atvintermediario4();
-    }
-    break;
-
-    default:
-    {
-        printf("Selecione um exercicio valido");
-    }
-    }
-}
-
-void menuDificil()
-{
-    system(CLEAR_COMMAND);
-
-    selecionarDificuldade = LerNumero(
-        "EXERCICIOS DIFICEIS\n\n"
-        "1 = Agenda de Contatos\n"
-        "2 = Gerenciamento de Biblioteca\n"
-        "3 = Mapa de Rotas entre Cidades\n"
-        "4 = Rede Social\n"
-        "Selecione: ", 1, 4);
-
     switch (selecionarDificuldade)
     {
-    case 1:
-    {
-        atvdificil1();
-    }
-    break;
+        case 1:
+        {
+            atvintermediario1();
+        }
+        break;
 
-    case 2:
-    {
-        atvdificil2();
-    }
-    break;
+        case 2:
+        {
+            atvintermediario2();
+        }
+        break;
 
-    case 3:
-    {
-        atvdificil2();
-    }
-    break;
+        case 3:
+        {
+            atvintermediario3();
+        }
+        break;
 
-    case 4:
-    {
-        atvdificil2();
-    }
-    break;
+        case 4:
+        {
+            atvintermediario4();
+        }
+        break;
 
-    default:
-    {
-        printf("Selecione um exercicio valido");
+        default:
+        {
+            printf("Selecione um exercicio valido");
+        }
     }
-    }
+    return 0;
 }
 
 typedef struct no
@@ -271,17 +133,19 @@ typedef struct no
 
 typedef struct lista
 {
-    No *inicio;
+    No* inicio;
+    No* fim;
     int tam;
 }Lista;
 
-void CriarLista(Lista *lista)
+void CriarLista(Lista* lista)
 {
     lista->inicio = NULL;
+    lista->fim = NULL;
     lista->tam = 0;
 }
 
-void InserirNoInicio(Lista *lista, int num)
+void InserirNoInicio(Lista* lista, int num)
 {
     No* novo = malloc(sizeof(No));
 
@@ -290,6 +154,11 @@ void InserirNoInicio(Lista *lista, int num)
         novo->valor = num;
         novo->prox = lista->inicio;
         lista->inicio = novo;
+        if (lista->fim == NULL)
+        {
+            lista->fim = novo;
+        }
+        lista->fim->prox = lista->inicio;
         lista->tam++;
     }
     else
@@ -298,36 +167,33 @@ void InserirNoInicio(Lista *lista, int num)
     }
 }
 
-void InserirNoFim(Lista *lista, int num)
+void InserirNoFim(Lista* lista, int num)
 {
     No* aux, * novo = malloc(sizeof(No));
 
     if (novo)
     {
         novo->valor = num;
-        novo->prox = NULL;
-
+        
         //É o primeiro?
         if (lista->inicio == NULL)
         {
             //Se for o primeiro aponta para o novo.
             lista->inicio = novo;
+            lista->fim = novo;
+            lista->fim->prox = lista->inicio;
         }
         else
         {
-            //Percorre a lista para adicionar no final.
-            aux = lista->inicio;
-            while (aux->prox)
-            {
-                aux = aux->prox;
-            }
-            aux->prox = novo;
+            lista->fim->prox = novo;
+            lista->fim = novo;
+            lista->fim->prox = lista->inicio;
         }
         lista->tam++;
     }
 }
 
-void InserirNoMeio(Lista *lista, int num, int ant)
+void InserirNoMeio(Lista* lista, int num, int ant)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -360,7 +226,7 @@ void InserirNoMeio(Lista *lista, int num, int ant)
     }
 }
 
-void InserirOrdenado(Lista *lista, int num)
+void InserirOrdenado(Lista* lista, int num)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -369,25 +235,30 @@ void InserirOrdenado(Lista *lista, int num)
         novo->valor = num;
         if (lista->inicio == NULL)
         {
-            novo->prox = NULL;
-            lista->inicio = novo;
+            InserirNoInicio(lista, num);
         }
         else if (novo->valor < lista->inicio->valor)
         {
-            novo->prox = lista->inicio;
-            lista->inicio = novo;
+            InserirNoInicio(lista, num);
         }
         else
         {
             aux = lista->inicio;
-            while (aux->prox && novo->valor > aux->prox->valor)
+            while (aux->prox != lista->inicio && novo->valor > aux->prox->valor)
             {
                 aux = aux->prox;
             }
-            novo->prox = aux->prox;
-            aux->prox = novo;
+            if (aux->prox == lista->inicio)
+            {
+                InserirNoFim(lista, num);
+            }
+            else
+            {
+                novo->prox = aux->prox;
+                aux->prox = novo;
+                lista->tam++;
+            }
         }
-        lista->tam++;
     }
     else
     {
@@ -400,42 +271,16 @@ void Imprimir(Lista lista)
     No* no = lista.inicio;
 
     printf("\n\tLista tamanho %d: ", lista.tam);
-
-    while (no)
+    if (no)
     {
-        printf("%d ", no->valor);
-        no = no->prox;
+        do
+        {
+            printf("%d ", no->valor);
+            no = no->prox;
+        } while (no != lista.inicio);
+        printf("\nInicio: %d\n", no->valor);
     }
 }
-
-/*No* Removido(No** lista, int num)
-{
-    No *aux, *remover, *anterior = NULL;
-
-    if (*lista)
-    {
-        if ((*lista)->valor == num)
-        {
-            remover = *lista;
-            *lista = remover->prox;
-        }
-        else 
-        {
-            aux = *lista;
-            while (aux && aux->valor != num)
-            {
-                anterior = aux;
-                aux = aux->prox;
-            }
-            if (aux)
-            {
-                remover = aux;
-                anterior->prox = remover->prox;
-            }
-        }
-    }
-    return remover;
-}*/
 
 No* Removido(Lista* lista, int num)
 {
@@ -443,52 +288,63 @@ No* Removido(Lista* lista, int num)
 
     if (lista->inicio)
     {
-        if (lista->inicio->valor == num)
+        if (lista->inicio == lista->fim && lista->inicio->valor == num)
+        {
+            remover = lista->inicio;
+            lista->inicio = NULL;
+            lista->fim = NULL;
+            lista->tam--;
+        }
+        else if (lista->inicio->valor == num)
         {
             remover = lista->inicio;
             lista->inicio = remover->prox;
+            lista->fim->prox = lista->inicio;
+            lista->tam--;
         }
         else
         {
             aux = lista->inicio;
-            while (aux && aux->valor != num)
+            while (aux->prox != lista->inicio && aux->prox->valor != num)
             {
-                anterior = aux;
                 aux = aux->prox;
             }
-            if (aux)
+            if (aux->prox->valor == num)
             {
-                remover = aux;
-                anterior->prox = remover->prox;
+                if (lista->fim == aux->prox)
+                {
+                    remover = aux->prox;
+                    aux->prox = remover->prox;
+                    lista->fim = aux;
+                }
+                else
+                {
+                    remover = aux->prox;
+                    aux->prox = remover->prox;
+                }
+                lista->tam--;
             }
         }
     }
     return remover;
 }
 
-void BuscaElemento(Lista* lista, int num)
+No* BuscaElemento(Lista* lista, int num)
 {
-    No* no = lista->inicio;
+    No* aux = lista->inicio;
 
-    int posicao = 1;
-    int achou = 0;
-
-    while (no)
+    if (aux)
     {
-        if (no->valor == num)
+        do
         {
-            printf("Valor: %d - Posicao: %d ", no->valor, posicao);
-            achou = 1;
-        }
-
-        no = no->prox;
-        posicao++;
+            if (aux->valor == num)
+            {
+                return aux;
+            }
+            aux = aux->prox;
+        } while (aux != lista->inicio);
     }
-
-    if (!achou)
-    {
-        printf("Valor nao encontrado na lista.\n");
-    }
+    return NULL;
 }
 
 void DestruirLista(Lista* lista)
@@ -507,13 +363,13 @@ void DestruirLista(Lista* lista)
     lista->tam = 0;
 }
 
-void atvfacil1()
+void atvintermediario1()
 {
     system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
     No* remover = NULL;
-    
+
     Lista lista;
 
     CriarLista(&lista);
@@ -559,7 +415,7 @@ void atvfacil1()
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
             remover = Removido(&lista, valor);
-            
+
             if (remover)
             {
                 printf("Elemento a ser removido: %d\n", remover->valor);
@@ -590,75 +446,15 @@ void atvfacil1()
 
     return;
 }
-void atvfacil2()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvfacil3()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvfacil4()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvfacil5()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-
-void atvintermediario1()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
 void atvintermediario2()
 {
-    system(CLEAR_COMMAND);
     return;
 }
-void atvintermediario3()
+void atvintermediario3() 
 {
-    system(CLEAR_COMMAND);
     return;
 }
-void atvintermediario4()
+void atvintermediario4() 
 {
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvintermediario5()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-
-void atvdificil1()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvdificil2()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvdificil3()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvdificil4()
-{
-    system(CLEAR_COMMAND);
-    return;
-}
-void atvdificil5()
-{
-    system(CLEAR_COMMAND);
     return;
 }
