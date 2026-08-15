@@ -175,6 +175,13 @@ void menuFacil()
 
 void menuIntermediario() 
 {
+    selecionarDificuldade = LerNumero(
+        "EXERCICIOS INTERMEDIARIOS\n\n"
+        "1 = Lista Circular\n"
+        "2 = Lista Duplamente Encadeada\n"
+        "3 = Lista Circular Duplamente Encadeada\n"
+        "4 = Lista com No Cabeca\n"
+        "Selecione: ", 1, 4);
 
     switch (exercicio) {
         case 1: 
@@ -210,6 +217,13 @@ void menuIntermediario()
 
 void menuDificil() 
 {
+    selecionarDificuldade = LerNumero(
+        "EXERCICIOS DIFICEIS\n\n"
+        "1 = Agenda de Contatos\n"
+        "2 = Gerenciamento de Biblioteca\n"
+        "3 = Mapa de Rotas entre Cidades\n"
+        "4 = Rede Social\n"
+        "Selecione: ", 1, 4);
 
     switch (exercicio) 
     {
@@ -220,6 +234,18 @@ void menuDificil()
         break;
 
         case 2: 
+        {
+            atvdificil2();
+        }
+        break;
+
+        case 3: 
+        {
+            atvdificil2();
+        }
+        break;
+
+        case 4: 
         {
             atvdificil2();
         }
