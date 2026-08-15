@@ -16,9 +16,13 @@ bin/
 obj/
 output/
 
-# Arquivos do VS Code
+# Arquivos do VS
 .vscode/
 .vs/
+.slnx
+.vcxproj
+.vcxproj.filters
+.vcxproj.user
 
 # Arquivos temporários
 *.tmp
