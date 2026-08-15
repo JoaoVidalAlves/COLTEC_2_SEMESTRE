@@ -18,6 +18,7 @@ output/
 
 # Arquivos do VS Code
 .vscode/
+.vs/
 
 # Arquivos temporários
 *.tmp
