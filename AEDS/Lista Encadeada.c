@@ -102,7 +102,7 @@ int selecionarDificuldade = 0;
 
 int main() 
 {
-    while(true)
+    while(1)
     {
         system("CLEAR_COMMAND");
 
@@ -183,7 +183,7 @@ void menuIntermediario()
         "4 = Lista com No Cabeca\n"
         "Selecione: ", 1, 4);
 
-    switch (exercicio) {
+    switch (selecionarDificuldade) {
         case 1: 
         {
             atvintermediario1();
@@ -225,7 +225,7 @@ void menuDificil()
         "4 = Rede Social\n"
         "Selecione: ", 1, 4);
 
-    switch (exercicio) 
+    switch (selecionarDificuldade)
     {
         case 1: 
         {
@@ -256,4 +256,67 @@ void menuDificil()
             printf("Selecione um exercicio valido");
         }
     }
+}
+
+void atvfacil1()
+{
+    return;
+}
+void atvfacil2()
+{
+    return;
+}
+void atvfacil3()
+{
+    return;
+}
+void atvfacil4()
+{
+    return;
+}
+void atvfacil5()
+{
+    return;
+}
+
+void atvintermediario1()
+{
+    return;
+}
+void atvintermediario2()
+{
+    return;
+}
+void atvintermediario3()
+{
+    return;
+}
+void atvintermediario4()
+{
+    return;
+}
+void atvintermediario5()
+{
+    return;
+}
+
+void atvdificil1()
+{
+    return;
+}
+void atvdificil2()
+{
+    return;
+}
+void atvdificil3()
+{
+    return;
+}
+void atvdificil4()
+{
+    return;
+}
+void atvdificil5()
+{
+    return;
 }
