@@ -373,11 +373,82 @@ void Imprimir(Lista lista)
     }
 }
 
+No* Removido(No** lista, int num)
+{
+    No *aux, *remover, *anterior = NULL;
+
+    if (*lista)
+    {
+        if ((*lista)->valor == num)
+        {
+            remover = *lista;
+            *lista = remover->prox;
+        }
+        else 
+        {
+            aux = *lista;
+            while (aux && aux->valor != num)
+            {
+                anterior = aux;
+                aux = aux->prox;
+            }
+            if (aux)
+            {
+                remover = aux;
+                anterior->prox = remover->prox;
+            }
+        }
+    }
+    return remover;
+}
+
+void BuscaElemento(Lista* lista, int num)
+{
+    No* no = lista->inicio;
+
+    int posicao = 1;
+    int achou = 0;
+
+    while (no)
+    {
+        if (no->valor == num)
+        {
+            printf("Valor: %d - Posicao: %d ", no->valor, posicao);
+            achou = 1;
+        }
+
+        no = no->prox;
+        posicao++;
+    }
+
+    if (!achou)
+    {
+        printf("Valor nao encontrado na lista.\n");
+    }
+}
+
+void DestruirLista(Lista* lista)
+{
+    No* atual = lista->inicio;
+    No* proximo;
+
+    while (atual)
+    {
+        proximo = atual->prox;
+        free(atual);
+        atual = proximo;
+    }
+
+    lista->inicio = NULL;
+    lista->tam = 0;
+}
+
 void atvfacil1()
 {
     system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
+    No* remover = NULL;
     
     Lista lista;
 
@@ -390,8 +461,11 @@ void atvfacil1()
             "1 - Inserir Inicio\n\t"
             "2 - Inserir Meio\n\t"
             "3 - Inserir Fim\n\t"
-            "4 - Imprimir\n\t"
-            "Selecione: ", 0, 4);
+            "4 - Remover\n\t"
+            "5 - Buscar\n\t"
+            "6 - Destruir Lista\n\t"
+            "7 - Imprimir\n\t"
+            "Selecione: ", 0, 7);
 
         switch (opcao)
         {
@@ -412,6 +486,27 @@ void atvfacil1()
             InserirNoFim(&lista, valor);
             break;
         case 4:
+            system(CLEAR_COMMAND);
+            valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
+            remover = Removido(&lista.inicio, valor);
+            
+            if (remover)
+            {
+                printf("Elemento a ser removido: %d\n", remover->valor);
+                lista.tam--;
+                free(remover);
+            }
+            break;
+        case 5:
+            system(CLEAR_COMMAND);
+            valor = LerNumero("Digite um valor a ser encontrado: ", 1, 100);
+            BuscaElemento(&lista, valor);
+            break;
+        case 6:
+            system(CLEAR_COMMAND);
+            DestruirLista(&lista);
+            break;
+        case 7:
             system(CLEAR_COMMAND);
             Imprimir(lista);
             break;
