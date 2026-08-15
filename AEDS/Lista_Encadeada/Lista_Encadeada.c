@@ -263,102 +263,102 @@ void menuDificil()
     }
 }
 
-void atvfacil1()
+typedef struct no
 {
-    system(CLEAR_COMMAND);
+    int valor;
+    struct no* prox;
+}No;
 
-    typedef struct no
+void InserirNoInicio(No * *lista, int num)
+{
+    No* novo = malloc(sizeof(No));
+
+    if (novo)
     {
-        int valor;
-        struct no* prox;
-    }No;
-
-    void InserirNoInicio(No * *lista, int num)
+        novo->valor = num;
+        novo->prox = *lista;
+        *lista = novo;
+    }
+    else
     {
-        No* novo = malloc(sizeof(No));
+        printf("Erro ao alocar memoria!");
+    }
+}
 
-        if (novo)
+void InserirNoFim(No * *lista, int num)
+{
+    No* aux, * novo = malloc(sizeof(No));
+
+    if (novo)
+    {
+        novo->valor = num;
+        novo->prox = NULL;
+
+        //É o primeiro?
+        if (*lista == NULL)
         {
-            novo->valor = num;
-            novo->prox = *lista;
+            //Se for o primeiro aponta para o novo.
             *lista = novo;
         }
         else
         {
-            printf("Erro ao alocar memoria!");
+            //Percorre a lista para adicionar no final.
+            aux = *lista;
+            while (aux->prox)
+            {
+                aux = aux->prox;
+            }
+            aux->prox = novo;
         }
     }
+}
 
-    void InserirNoFim(No * *lista, int num)
+void InserirNoMeio(No * *lista, int num, int ant)
+{
+    No* aux, * novo = malloc(sizeof(No));
+
+    if (novo)
     {
-        No* aux, * novo = malloc(sizeof(No));
+        novo->valor = num;
 
-        if (novo)
+        //É o primeiro?
+        if (*lista == NULL)
         {
-            novo->valor = num;
             novo->prox = NULL;
-
-            //É o primeiro?
-            if (*lista == NULL)
-            {
-                //Se for o primeiro aponta para o novo.
-                *lista = novo;
-            }
-            else
-            {
-                //Percorre a lista para adicionar no final.
-                aux = *lista;
-                while (aux->prox)
-                {
-                    aux = aux->prox;
-                }
-                aux->prox = novo;
-            }
-        }
-    }
-
-    void InserirNoMeio(No * *lista, int num, int ant)
-    {
-        No* aux, * novo = malloc(sizeof(No));
-
-        if (novo)
-        {
-            novo->valor = num;
-
-            //É o primeiro?
-            if (*lista == NULL)
-            {
-                novo->prox = NULL;
-                *lista = novo;
-            }
-            else
-            {
-                aux = *lista;
-
-                while (aux->valor != ant && aux->prox)
-                {
-                    aux = aux->prox;
-                }
-                novo->prox = aux->prox;
-                aux->prox = novo;
-            }
+            *lista = novo;
         }
         else
         {
-            printf("Erro ao alocar memoria!");
+            aux = *lista;
+
+            while (aux->valor != ant && aux->prox)
+            {
+                aux = aux->prox;
+            }
+            novo->prox = aux->prox;
+            aux->prox = novo;
         }
     }
-
-    void Imprimir(No * no)
+    else
     {
-        printf("\n\tLista: ");
-
-        while (no)
-        {
-            printf("%d ", no->valor);
-            no = no->prox;
-        }
+        printf("Erro ao alocar memoria!");
     }
+}
+
+void Imprimir(No * no)
+{
+    printf("\n\tLista: ");
+
+    while (no)
+    {
+        printf("%d ", no->valor);
+        no = no->prox;
+    }
+}
+
+void atvfacil1()
+{
+    system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
     No* lista = NULL;
