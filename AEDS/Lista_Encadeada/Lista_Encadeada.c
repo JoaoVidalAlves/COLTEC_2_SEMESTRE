@@ -269,15 +269,28 @@ typedef struct no
     struct no* prox;
 }No;
 
-void InserirNoInicio(No * *lista, int num)
+typedef struct lista
+{
+    No *inicio;
+    int tam;
+}Lista;
+
+void CriarLista(Lista* lista)
+{
+    lista->inicio = NULL;
+    lista->tam = 0;
+}
+
+void InserirNoInicio(Lista *lista, int num)
 {
     No* novo = malloc(sizeof(No));
 
     if (novo)
     {
         novo->valor = num;
-        novo->prox = *lista;
-        *lista = novo;
+        novo->prox = lista->inicio;
+        lista->inicio = novo;
+        lista->tam++;
     }
     else
     {
@@ -285,7 +298,7 @@ void InserirNoInicio(No * *lista, int num)
     }
 }
 
-void InserirNoFim(No * *lista, int num)
+void InserirNoFim(Lista *lista, int num)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -295,25 +308,26 @@ void InserirNoFim(No * *lista, int num)
         novo->prox = NULL;
 
         //É o primeiro?
-        if (*lista == NULL)
+        if (lista->inicio == NULL)
         {
             //Se for o primeiro aponta para o novo.
-            *lista = novo;
+            lista->inicio = novo;
         }
         else
         {
             //Percorre a lista para adicionar no final.
-            aux = *lista;
+            aux = lista->inicio;
             while (aux->prox)
             {
                 aux = aux->prox;
             }
             aux->prox = novo;
         }
+        lista->tam++;
     }
 }
 
-void InserirNoMeio(No * *lista, int num, int ant)
+void InserirNoMeio(Lista *lista, int num, int ant)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -322,14 +336,14 @@ void InserirNoMeio(No * *lista, int num, int ant)
         novo->valor = num;
 
         //É o primeiro?
-        if (*lista == NULL)
+        if (lista->inicio == NULL)
         {
             novo->prox = NULL;
-            *lista = novo;
+            lista->inicio = novo;
         }
         else
         {
-            aux = *lista;
+            aux = lista->inicio;
 
             while (aux->valor != ant && aux->prox)
             {
@@ -338,6 +352,7 @@ void InserirNoMeio(No * *lista, int num, int ant)
             novo->prox = aux->prox;
             aux->prox = novo;
         }
+        lista->tam++;
     }
     else
     {
@@ -345,9 +360,11 @@ void InserirNoMeio(No * *lista, int num, int ant)
     }
 }
 
-void Imprimir(No * no)
+void Imprimir(Lista lista)
 {
-    printf("\n\tLista: ");
+    No* no = lista.inicio;
+
+    printf("\n\tLista tamanho %d: ", lista.tam);
 
     while (no)
     {
@@ -361,7 +378,10 @@ void atvfacil1()
     system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
-    No* lista = NULL;
+    
+    Lista lista;
+
+    CriarLista(&lista);
 
     do
     {
