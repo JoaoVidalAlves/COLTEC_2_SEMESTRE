@@ -391,7 +391,7 @@ void InserirOrdenado(Lista *lista, int num)
     }
     else
     {
-        printf("Erro ao alocar memoria!")
+        printf("Erro ao alocar memoria!");
     }
 }
 
