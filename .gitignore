@@ -1,30 +1,65 @@
-# Executáveis do Windows
+# =========================
+# Executáveis
+# =========================
+
+# Windows
 *.exe
 
-# Executáveis Linux
+# Linux
 *.out
+
+
+# =========================
+# Arquivos de compilação
+# =========================
 
 # Arquivos objeto
 *.o
+*.obj
 
-# Arquivos de depuração
+# Dependências geradas pelo GCC
 *.d
 
-# Pasta de build
+# Debug
+*.pdb
+
+
+# =========================
+# Pastas de build
+# =========================
+
 build/
 bin/
 obj/
 output/
+Debug/
+Release/
 x64/
+x86/
 
-# Arquivos do VS
-.vscode/
+
+# =========================
+# Visual Studio
+# =========================
+
 .vs/
-.slnx
-.vcxproj
-.vcxproj.filters
-.vcxproj.user
 
+# Configurações específicas do usuário
+*.user
+*.vcxproj.user
+*.suo
+
+
+# =========================
+# VS Code
+# =========================
+
+.vscode/
+
+
+# =========================
 # Arquivos temporários
+# =========================
+
 *.tmp
 *.temp
