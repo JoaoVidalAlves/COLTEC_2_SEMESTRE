@@ -102,50 +102,52 @@ int selecionarDificuldade = 0;
 
 int main() 
 {
-    while(1)
+    system(CLEAR_COMMAND);
+
+    selecionarDificuldade = LerNumero(
+        "EXERCICIOS DE LISTAS ENCADEADAS\n\n"
+        "Selecione a dificuldade\n"
+        "1 = FACIL\n"
+        "2 = INTERMEDIARIO\n"
+        "3 = DIFICIL\n"
+        "Selecione: ", 1, 3);
+
+    switch (selecionarDificuldade)
     {
-        system("CLEAR_COMMAND");
-
-        selecionarDificuldade = LerNumero(
-            "EXERCICIOS DE LISTAS ENCADEADAS\n\n"
-            "Selecione a dificuldade\n"
-            "1 = FACIL\n"
-            "2 = INTERMEDIARIO\n"
-            "3 = DIFICIL\n"
-            "Selecione: ", 1, 3);
-
-        switch (selecionarDificuldade)
+        case 1: 
         {
-            case 1: 
-            {
-                menuFacil();
-            }
-            break;
+            system(CLEAR_COMMAND);
+            menuFacil();
+        }
+        break;
 
-            case 2: 
-            {
-                menuIntermediario();
-            }
-            break;
+        case 2: 
+        {
+            system(CLEAR_COMMAND);
+            menuIntermediario();
+        }
+        break;
 
-            case 3: 
-            {
-                menuDificil();
-            }
-            break;
+        case 3: 
+        {
+            system(CLEAR_COMMAND);
+            menuDificil();
+        }
+        break;
 
-            default: 
-            {
-                printf("Selecione uma dificuldade valida.");
-                continue;
-            }
+        default: 
+        {
+            printf("Selecione uma dificuldade valida.");
         }
     }
+    return 0;
 }
 
 //PROTOTIPO DAS DIFICULDADES
 void menuFacil() 
 {
+    system(CLEAR_COMMAND);
+
     selecionarDificuldade = LerNumero(
         "EXERCICIOS FACEIS\n\n"
         "1 = Lista Encadeada Simples\n"
@@ -175,6 +177,8 @@ void menuFacil()
 
 void menuIntermediario() 
 {
+    system(CLEAR_COMMAND);
+
     selecionarDificuldade = LerNumero(
         "EXERCICIOS INTERMEDIARIOS\n\n"
         "1 = Lista Circular\n"
@@ -217,6 +221,8 @@ void menuIntermediario()
 
 void menuDificil() 
 {
+    system(CLEAR_COMMAND);
+
     selecionarDificuldade = LerNumero(
         "EXERCICIOS DIFICEIS\n\n"
         "1 = Agenda de Contatos\n"
@@ -260,63 +266,78 @@ void menuDificil()
 
 void atvfacil1()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvfacil2()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvfacil3()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvfacil4()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvfacil5()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 
 void atvintermediario1()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvintermediario2()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvintermediario3()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvintermediario4()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvintermediario5()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 
 void atvdificil1()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvdificil2()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvdificil3()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvdificil4()
 {
+    system(CLEAR_COMMAND);
     return;
 }
 void atvdificil5()
 {
+    system(CLEAR_COMMAND);
     return;
 }
