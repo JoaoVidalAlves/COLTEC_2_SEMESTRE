@@ -15,6 +15,7 @@ build/
 bin/
 obj/
 output/
+x64/
 
 # Arquivos do VS
 .vscode/
