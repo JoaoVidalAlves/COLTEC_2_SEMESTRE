@@ -73,9 +73,6 @@ void LerTexto(const char* mensagem, char texto[], int tamanho)
 
 //DECLARAR PROTOTIPOS DO MENU E ATIVIDADES
 void atvintermediario1();
-void atvintermediario2();
-void atvintermediario3();
-void atvintermediario4();
 
 int main()
 {
@@ -93,34 +90,34 @@ int main()
 
     switch (selecionarDificuldade)
     {
-        case 1:
-        {
-            atvintermediario1();
-        }
-        break;
+    case 1:
+    {
+        atvintermediario1();
+    }
+    break;
 
-        case 2:
-        {
-            atvintermediario2();
-        }
-        break;
+    case 2:
+    {
+        atvintermediario2();
+    }
+    break;
 
-        case 3:
-        {
-            atvintermediario3();
-        }
-        break;
+    case 3:
+    {
+        atvintermediario3();
+    }
+    break;
 
-        case 4:
-        {
-            atvintermediario4();
-        }
-        break;
+    case 4:
+    {
+        atvintermediario4();
+    }
+    break;
 
-        default:
-        {
-            printf("Selecione um exercicio valido");
-        }
+    default:
+    {
+        printf("Selecione um exercicio valido");
+    }
     }
     return 0;
 }
@@ -174,7 +171,7 @@ void InserirNoFim(Lista* lista, int num)
     if (novo)
     {
         novo->valor = num;
-        
+
         //É o primeiro?
         if (lista->inicio == NULL)
         {
@@ -444,17 +441,5 @@ void atvintermediario1()
         }
     } while (opcao != 0);
 
-    return;
-}
-void atvintermediario2()
-{
-    return;
-}
-void atvintermediario3() 
-{
-    return;
-}
-void atvintermediario4() 
-{
     return;
 }

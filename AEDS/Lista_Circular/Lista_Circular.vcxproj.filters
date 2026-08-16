@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lista_Encadeada_Facil.c">
+    <ClCompile Include="Lista_Circular.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>

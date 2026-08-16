@@ -87,16 +87,16 @@ int main()
 
     switch (selecionarDificuldade)
     {
-        case 1:
-        {
-            atvfacil1();
-        }
-        break;
+    case 1:
+    {
+        atvfacil1();
+    }
+    break;
 
-        default:
-        {
-            printf("Selecione um exercicio valido");
-        }
+    default:
+    {
+        printf("Selecione um exercicio valido");
+    }
     }
     return 0;
 }
@@ -109,19 +109,19 @@ typedef struct no
 
 typedef struct lista
 {
-    No *inicio;
+    No* inicio;
     No* fim;
     int tam;
 }Lista;
 
-void CriarLista(Lista *lista)
+void CriarLista(Lista* lista)
 {
     lista->inicio = NULL;
     lista->fim = NULL;
     lista->tam = 0;
 }
 
-void InserirNoInicio(Lista *lista, int num)
+void InserirNoInicio(Lista* lista, int num)
 {
     No* novo = malloc(sizeof(No));
 
@@ -138,7 +138,7 @@ void InserirNoInicio(Lista *lista, int num)
     }
 }
 
-void InserirNoFim(Lista *lista, int num)
+void InserirNoFim(Lista* lista, int num)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -167,7 +167,7 @@ void InserirNoFim(Lista *lista, int num)
     }
 }
 
-void InserirNoMeio(Lista *lista, int num, int ant)
+void InserirNoMeio(Lista* lista, int num, int ant)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -200,7 +200,7 @@ void InserirNoMeio(Lista *lista, int num, int ant)
     }
 }
 
-void InserirOrdenado(Lista *lista, int num)
+void InserirOrdenado(Lista* lista, int num)
 {
     No* aux, * novo = malloc(sizeof(No));
 
@@ -324,7 +324,7 @@ void atvfacil1()
 
     int opcao = 0, valor = 0, anterior = 0;
     No* remover = NULL;
-    
+
     Lista lista;
 
     CriarLista(&lista);
@@ -370,7 +370,7 @@ void atvfacil1()
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
             remover = Removido(&lista, valor);
-            
+
             if (remover)
             {
                 printf("Elemento a ser removido: %d\n", remover->valor);

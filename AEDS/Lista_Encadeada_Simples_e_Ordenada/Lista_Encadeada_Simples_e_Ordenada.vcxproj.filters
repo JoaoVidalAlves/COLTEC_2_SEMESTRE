@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lista_Encadeada_Intermediario.c">
+    <ClCompile Include="Lista_Encadeada_Simples_e_Ordenada.c">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>

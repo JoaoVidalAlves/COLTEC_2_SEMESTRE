@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Lista_Encadeada_Intermediario.vcxproj" Id="e82bdb61-62ef-49da-939d-1a82c2337f67" />
+  <Project Path="Lista_Circular.vcxproj" Id="79198661-e0c8-4802-b8a0-2c8ac3e518c0" />
 </Solution>

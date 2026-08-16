@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e82bdb61-62ef-49da-939d-1a82c2337f67}</ProjectGuid>
-    <RootNamespace>ListaEncadeadaIntermediario</RootNamespace>
+    <ProjectGuid>{79198661-e0c8-4802-b8a0-2c8ac3e518c0}</ProjectGuid>
+    <RootNamespace>ListaCircular</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,7 +139,7 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Lista_Encadeada_Intermediario.c" />
+    <ClCompile Include="Lista_Circular.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
