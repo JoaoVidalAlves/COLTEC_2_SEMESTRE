@@ -71,102 +71,30 @@ void LerTexto(const char* mensagem, char texto[], int tamanho)
     }
 }
 
-//DECLARAR PROTOTIPOS DO MENU E ATIVIDADES
-void atvintermediario1();
-
-int main()
-{
-    system(CLEAR_COMMAND);
-
-    int selecionarDificuldade = 0;
-
-    selecionarDificuldade = LerNumero(
-        "EXERCICIOS INTERMEDIARIOS\n\n"
-        "1 = Lista Circular\n"
-        "2 = Lista Duplamente Encadeada\n"
-        "3 = Lista Circular Duplamente Encadeada\n"
-        "4 = Lista com No Cabeca\n"
-        "Selecione: ", 1, 4);
-
-    switch (selecionarDificuldade)
-    {
-    case 1:
-    {
-        atvintermediario1();
-    }
-    break;
-
-    case 2:
-    {
-        atvintermediario2();
-    }
-    break;
-
-    case 3:
-    {
-        atvintermediario3();
-    }
-    break;
-
-    case 4:
-    {
-        atvintermediario4();
-    }
-    break;
-
-    default:
-    {
-        printf("Selecione um exercicio valido");
-    }
-    }
-    return 0;
-}
-
-typedef struct no
+typedef struct noDupla
 {
     int valor;
-    struct no* prox;
-}No;
+    struct noDupla* prox;
+    struct noDupla* ant;
+}NoDupla;
 
-typedef struct lista
+typedef struct listaDupla
 {
-    No* inicio;
-    No* fim;
+    NoDupla* inicio;
+    NoDupla* fim;
     int tam;
-}Lista;
+}ListaDupla;
 
-void CriarLista(Lista* lista)
+void CriarListaDupla(ListaDupla* lista)
 {
     lista->inicio = NULL;
     lista->fim = NULL;
     lista->tam = 0;
 }
 
-void InserirNoInicio(Lista* lista, int num)
+void InserirInicioDupla(ListaDupla* lista, int num)
 {
-    No* novo = malloc(sizeof(No));
-
-    if (novo)
-    {
-        novo->valor = num;
-        novo->prox = lista->inicio;
-        lista->inicio = novo;
-        if (lista->fim == NULL)
-        {
-            lista->fim = novo;
-        }
-        lista->fim->prox = lista->inicio;
-        lista->tam++;
-    }
-    else
-    {
-        printf("Erro ao alocar memoria!");
-    }
-}
-
-void InserirNoFim(Lista* lista, int num)
-{
-    No* aux, * novo = malloc(sizeof(No));
+    NoDupla* novo = malloc(sizeof(NoDupla));
 
     if (novo)
     {
@@ -175,24 +103,30 @@ void InserirNoFim(Lista* lista, int num)
         //É o primeiro?
         if (lista->inicio == NULL)
         {
-            //Se for o primeiro aponta para o novo.
+            novo->prox = novo;
+            novo->ant = novo;
             lista->inicio = novo;
             lista->fim = novo;
-            lista->fim->prox = lista->inicio;
         }
         else
         {
+            novo->prox = lista->inicio;
+            novo->ant = lista->fim;
+            lista->inicio->ant = novo;
             lista->fim->prox = novo;
-            lista->fim = novo;
-            lista->fim->prox = lista->inicio;
+            lista->inicio = novo;
         }
         lista->tam++;
     }
+    else
+    {
+        printf("Erro ao alocar memoria!");
+    }
 }
 
-void InserirNoMeio(Lista* lista, int num, int ant)
+void InserirFimDupla(ListaDupla* lista, int num)
 {
-    No* aux, * novo = malloc(sizeof(No));
+    NoDupla* novo = malloc(sizeof(NoDupla));
 
     if (novo)
     {
@@ -201,19 +135,18 @@ void InserirNoMeio(Lista* lista, int num, int ant)
         //É o primeiro?
         if (lista->inicio == NULL)
         {
-            novo->prox = NULL;
+            novo->prox = novo;
+            novo->ant = novo;
             lista->inicio = novo;
+            lista->fim = novo;
         }
         else
         {
-            aux = lista->inicio;
-
-            while (aux->valor != ant && aux->prox)
-            {
-                aux = aux->prox;
-            }
-            novo->prox = aux->prox;
-            aux->prox = novo;
+            novo->prox = lista->inicio;
+            novo->ant = lista->fim;
+            lista->fim->prox = novo;
+            lista->inicio->ant = novo;
+            lista->fim = novo;
         }
         lista->tam++;
     }
@@ -223,39 +156,42 @@ void InserirNoMeio(Lista* lista, int num, int ant)
     }
 }
 
-void InserirOrdenado(Lista* lista, int num)
+void InserirMeioDupla(ListaDupla* lista, int num, int ant)
 {
-    No* aux, * novo = malloc(sizeof(No));
+    NoDupla* aux, * novo = malloc(sizeof(NoDupla));
 
     if (novo)
     {
         novo->valor = num;
+
+        //Lista vazia -> insere no inicio
         if (lista->inicio == NULL)
         {
-            InserirNoInicio(lista, num);
+            InserirInicioDupla(lista, num);
+            free(novo);
+            return;
         }
-        else if (novo->valor < lista->inicio->valor)
+
+        aux = lista->inicio;
+
+        while (aux->valor != ant && aux->prox != lista->inicio)
         {
-            InserirNoInicio(lista, num);
+            aux = aux->prox;
         }
-        else
+
+        //Se o valor de referencia for o ultimo, insere no fim
+        if (aux == lista->fim && aux->valor == ant)
         {
-            aux = lista->inicio;
-            while (aux->prox != lista->inicio && novo->valor > aux->prox->valor)
-            {
-                aux = aux->prox;
-            }
-            if (aux->prox == lista->inicio)
-            {
-                InserirNoFim(lista, num);
-            }
-            else
-            {
-                novo->prox = aux->prox;
-                aux->prox = novo;
-                lista->tam++;
-            }
+            InserirFimDupla(lista, num);
+            free(novo);
+            return;
         }
+
+        novo->prox = aux->prox;
+        novo->ant = aux;
+        aux->prox->ant = novo;
+        aux->prox = novo;
+        lista->tam++;
     }
     else
     {
@@ -263,9 +199,40 @@ void InserirOrdenado(Lista* lista, int num)
     }
 }
 
-void Imprimir(Lista lista)
+void InserirOrdenadoDupla(ListaDupla* lista, int num)
 {
-    No* no = lista.inicio;
+    NoDupla* aux;
+
+    if (lista->inicio == NULL)
+    {
+        InserirInicioDupla(lista, num);
+    }
+    else if (num < lista->inicio->valor)
+    {
+        InserirInicioDupla(lista, num);
+    }
+    else
+    {
+        aux = lista->inicio;
+        while (aux->prox != lista->inicio && num > aux->prox->valor)
+        {
+            aux = aux->prox;
+        }
+
+        if (aux == lista->fim)
+        {
+            InserirFimDupla(lista, num);
+        }
+        else
+        {
+            InserirMeioDupla(lista, num, aux->valor);
+        }
+    }
+}
+
+void ImprimirDupla(ListaDupla lista)
+{
+    NoDupla* no = lista.inicio;
 
     printf("\n\tLista tamanho %d: ", lista.tam);
     if (no)
@@ -275,60 +242,79 @@ void Imprimir(Lista lista)
             printf("%d ", no->valor);
             no = no->prox;
         } while (no != lista.inicio);
-        printf("\nInicio: %d\n", no->valor);
+        printf("\n");
     }
 }
 
-No* Removido(Lista* lista, int num)
+void ImprimirInvertidoDupla(ListaDupla lista)
 {
-    No* aux, * remover = NULL, * anterior = NULL;
+    NoDupla* no = lista.fim;
+
+    printf("\n\tLista invertida tamanho %d: ", lista.tam);
+    if (no)
+    {
+        do
+        {
+            printf("%d ", no->valor);
+            no = no->ant;
+        } while (no != lista.fim);
+        printf("\n");
+    }
+}
+
+NoDupla* RemovidoDupla(ListaDupla* lista, int num)
+{
+    NoDupla* aux, * remover = NULL;
 
     if (lista->inicio)
     {
+        //Unico elemento da lista
         if (lista->inicio == lista->fim && lista->inicio->valor == num)
         {
             remover = lista->inicio;
             lista->inicio = NULL;
             lista->fim = NULL;
-            lista->tam--;
         }
+        //É o primeiro?
         else if (lista->inicio->valor == num)
         {
             remover = lista->inicio;
             lista->inicio = remover->prox;
+            lista->inicio->ant = lista->fim;
             lista->fim->prox = lista->inicio;
-            lista->tam--;
         }
         else
         {
             aux = lista->inicio;
-            while (aux->prox != lista->inicio && aux->prox->valor != num)
+            while (aux != lista->fim && aux->valor != num)
             {
                 aux = aux->prox;
             }
-            if (aux->prox->valor == num)
+
+            if (aux->valor == num)
             {
-                if (lista->fim == aux->prox)
+                remover = aux;
+                remover->ant->prox = remover->prox;
+                remover->prox->ant = remover->ant;
+
+                if (remover == lista->fim)
                 {
-                    remover = aux->prox;
-                    aux->prox = remover->prox;
-                    lista->fim = aux;
+                    lista->fim = remover->ant;
                 }
-                else
-                {
-                    remover = aux->prox;
-                    aux->prox = remover->prox;
-                }
-                lista->tam--;
             }
+        }
+
+        if (remover)
+        {
+            lista->tam--;
         }
     }
     return remover;
 }
 
-No* BuscaElemento(Lista* lista, int num)
+NoDupla* BuscaElementoDupla(ListaDupla* lista, int num)
 {
-    No* aux = lista->inicio;
+    NoDupla* aux = lista->inicio;
 
     if (aux)
     {
@@ -340,23 +326,29 @@ No* BuscaElemento(Lista* lista, int num)
             }
             aux = aux->prox;
         } while (aux != lista->inicio);
+
     }
     return NULL;
 }
 
-void DestruirLista(Lista* lista)
+void DestruirListaDupla(ListaDupla* lista)
 {
-    No* atual = lista->inicio;
-    No* proximo;
+    NoDupla* atual = lista->inicio;
+    NoDupla* proximo;
+    int i;
 
-    while (atual)
+    if (atual)
     {
-        proximo = atual->prox;
-        free(atual);
-        atual = proximo;
+        for (i = 0; i < lista->tam; i++)
+        {
+            proximo = atual->prox;
+            free(atual);
+            atual = proximo;
+        }
     }
 
     lista->inicio = NULL;
+    lista->fim = NULL;
     lista->tam = 0;
 }
 
@@ -365,11 +357,11 @@ void atvintermediario1()
     system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
-    No* remover = NULL;
+    NoDupla* remover = NULL;
 
-    Lista lista;
+    ListaDupla lista;
 
-    CriarLista(&lista);
+    CriarListaDupla(&lista);
 
     do
     {
@@ -390,28 +382,28 @@ void atvintermediario1()
         case 1:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor: ", 1, 100);
-            InserirNoInicio(&lista, valor);
+            InserirInicioDupla(&lista, valor);
             break;
         case 2:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
             anterior = LerNumero("Digite o valor de referencia: ", 1, 100);
-            InserirNoMeio(&lista, valor, anterior);
+            InserirMeioDupla(&lista, valor, anterior);
             break;
         case 3:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-            InserirNoFim(&lista, valor);
+            InserirFimDupla(&lista, valor);
             break;
         case 4:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-            InserirOrdenado(&lista, valor);
+            InserirOrdenadoDupla(&lista, valor);
             break;
         case 5:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
-            remover = Removido(&lista, valor);
+            remover = RemovidoDupla(&lista, valor);
 
             if (remover)
             {
@@ -423,15 +415,15 @@ void atvintermediario1()
         case 6:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser encontrado: ", 1, 100);
-            BuscaElemento(&lista, valor);
+            BuscaElementoDupla(&lista, valor);
             break;
         case 7:
             system(CLEAR_COMMAND);
-            DestruirLista(&lista);
+            DestruirListaDupla(&lista);
             break;
         case 8:
             system(CLEAR_COMMAND);
-            Imprimir(lista);
+            ImprimirDupla(lista);
             break;
         default:
             if (opcao != 0)
@@ -442,4 +434,31 @@ void atvintermediario1()
     } while (opcao != 0);
 
     return;
+}
+
+int main()
+{
+    system(CLEAR_COMMAND);
+
+    int selecionarDificuldade = 0;
+
+    selecionarDificuldade = LerNumero(
+        "EXERCICIOS\n\n"
+        "1 = Lista Circular Duplamente Encadeada\n"
+        "Selecione: ", 1, 1);
+
+    switch (selecionarDificuldade)
+    {
+    case 1:
+    {
+        atvintermediario1();
+    }
+    break;
+
+    default:
+    {
+        printf("Selecione um exercicio valido");
+    }
+    }
+    return 0;
 }

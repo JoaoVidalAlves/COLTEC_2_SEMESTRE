@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Lista_Circular_Duplamente_Encadeada.vcxproj" />
+  <Project Path="Lista_Circular_Duplamente_Encadeada.vcxproj" Id="936143d8-d49a-42c3-9d09-89b0c5e3eef0" />
 </Solution>
