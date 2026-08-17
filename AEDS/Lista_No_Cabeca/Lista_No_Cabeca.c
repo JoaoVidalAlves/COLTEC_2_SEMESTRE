@@ -71,65 +71,43 @@ void LerTexto(const char* mensagem, char texto[], int tamanho)
     }
 }
 
-//DECLARAR PROTOTIPOS DO MENU E ATIVIDADES
-void atvfacil1();
-
-int main()
-{
-    system(CLEAR_COMMAND);
-
-    int selecionarDificuldade = 0;
-
-    selecionarDificuldade = LerNumero(
-        "EXERCICIOS FACEIS\n\n"
-        "1 = Lista Encadeada Simples e Ordenada\n"
-        "Selecione: ", 1, 1);
-
-    switch (selecionarDificuldade)
-    {
-    case 1:
-    {
-        atvfacil1();
-    }
-    break;
-
-    default:
-    {
-        printf("Selecione um exercicio valido");
-    }
-    }
-    return 0;
-}
-
-typedef struct no
+typedef struct noCabeca
 {
     int valor;
-    struct no* prox;
-}No;
+    struct noCabeca* prox;
+}NoCabeca;
 
-typedef struct lista
+typedef struct listaCabeca
 {
-    No* inicio;
-    No* fim;
+    NoCabeca* cabeca; //No sentinela, nunca guarda um valor de dado valido
     int tam;
-}Lista;
+}ListaCabeca;
 
-void CriarLista(Lista* lista)
+void CriarListaCabeca(ListaCabeca* lista)
 {
-    lista->inicio = NULL;
-    lista->fim = NULL;
-    lista->tam = 0;
+    lista->cabeca = malloc(sizeof(NoCabeca));
+
+    if (lista->cabeca)
+    {
+        lista->cabeca->valor = 0;
+        lista->cabeca->prox = NULL;
+        lista->tam = 0;
+    }
+    else
+    {
+        printf("Erro ao alocar memoria!");
+    }
 }
 
-void InserirNoInicio(Lista* lista, int num)
+void InserirInicioCabeca(ListaCabeca* lista, int num)
 {
-    No* novo = malloc(sizeof(No));
+    NoCabeca* novo = malloc(sizeof(NoCabeca));
 
     if (novo)
     {
         novo->valor = num;
-        novo->prox = lista->inicio;
-        lista->inicio = novo;
+        novo->prox = lista->cabeca->prox;
+        lista->cabeca->prox = novo;
         lista->tam++;
     }
     else
@@ -138,60 +116,21 @@ void InserirNoInicio(Lista* lista, int num)
     }
 }
 
-void InserirNoFim(Lista* lista, int num)
+void InserirFimCabeca(ListaCabeca* lista, int num)
 {
-    No* aux, * novo = malloc(sizeof(No));
+    NoCabeca* aux, * novo = malloc(sizeof(NoCabeca));
 
     if (novo)
     {
         novo->valor = num;
         novo->prox = NULL;
 
-        //É o primeiro?
-        if (lista->inicio == NULL)
+        aux = lista->cabeca;
+        while (aux->prox)
         {
-            //Se for o primeiro aponta para o novo.
-            lista->inicio = novo;
+            aux = aux->prox;
         }
-        else
-        {
-            //Percorre a lista para adicionar no final.
-            aux = lista->inicio;
-            while (aux->prox)
-            {
-                aux = aux->prox;
-            }
-            aux->prox = novo;
-        }
-        lista->tam++;
-    }
-}
-
-void InserirNoMeio(Lista* lista, int num, int ant)
-{
-    No* aux, * novo = malloc(sizeof(No));
-
-    if (novo)
-    {
-        novo->valor = num;
-
-        //É o primeiro?
-        if (lista->inicio == NULL)
-        {
-            novo->prox = NULL;
-            lista->inicio = novo;
-        }
-        else
-        {
-            aux = lista->inicio;
-
-            while (aux->valor != ant && aux->prox)
-            {
-                aux = aux->prox;
-            }
-            novo->prox = aux->prox;
-            aux->prox = novo;
-        }
+        aux->prox = novo;
         lista->tam++;
     }
     else
@@ -200,33 +139,22 @@ void InserirNoMeio(Lista* lista, int num, int ant)
     }
 }
 
-void InserirOrdenado(Lista* lista, int num)
+void InserirMeioCabeca(ListaCabeca* lista, int num, int ant)
 {
-    No* aux, * novo = malloc(sizeof(No));
+    NoCabeca* aux, * novo = malloc(sizeof(NoCabeca));
 
     if (novo)
     {
         novo->valor = num;
-        if (lista->inicio == NULL)
+
+        //Sempre parte da cabeca -> nunca precisa tratar lista vazia
+        aux = lista->cabeca;
+        while (aux->prox && aux->valor != ant)
         {
-            novo->prox = NULL;
-            lista->inicio = novo;
+            aux = aux->prox;
         }
-        else if (novo->valor < lista->inicio->valor)
-        {
-            novo->prox = lista->inicio;
-            lista->inicio = novo;
-        }
-        else
-        {
-            aux = lista->inicio;
-            while (aux->prox && novo->valor > aux->prox->valor)
-            {
-                aux = aux->prox;
-            }
-            novo->prox = aux->prox;
-            aux->prox = novo;
-        }
+        novo->prox = aux->prox;
+        aux->prox = novo;
         lista->tam++;
     }
     else
@@ -235,77 +163,81 @@ void InserirOrdenado(Lista* lista, int num)
     }
 }
 
-void Imprimir(Lista lista)
+void InserirOrdenadoCabeca(ListaCabeca* lista, int num)
 {
-    No* no = lista.inicio;
+    NoCabeca* aux, * novo = malloc(sizeof(NoCabeca));
+
+    if (novo)
+    {
+        novo->valor = num;
+
+        //A cabeca sempre existe, entao busca-se a posicao a partir dela
+        aux = lista->cabeca;
+        while (aux->prox && aux->prox->valor < num)
+        {
+            aux = aux->prox;
+        }
+        novo->prox = aux->prox;
+        aux->prox = novo;
+        lista->tam++;
+    }
+    else
+    {
+        printf("Erro ao alocar memoria!");
+    }
+}
+
+void ImprimirCabeca(ListaCabeca lista)
+{
+    NoCabeca* no = lista.cabeca->prox;
 
     printf("\n\tLista tamanho %d: ", lista.tam);
-
     while (no)
     {
         printf("%d ", no->valor);
         no = no->prox;
     }
+    printf("\n");
 }
 
-No* Removido(Lista* lista, int num)
+NoCabeca* RemovidoCabeca(ListaCabeca* lista, int num)
 {
-    No* aux, * remover = NULL, * anterior = NULL;
+    NoCabeca* aux, * remover = NULL;
 
-    if (lista->inicio)
+    aux = lista->cabeca;
+    while (aux->prox && aux->prox->valor != num)
     {
-        if (lista->inicio->valor == num)
-        {
-            remover = lista->inicio;
-            lista->inicio = remover->prox;
-        }
-        else
-        {
-            aux = lista->inicio;
-            while (aux && aux->valor != num)
-            {
-                anterior = aux;
-                aux = aux->prox;
-            }
-            if (aux)
-            {
-                remover = aux;
-                anterior->prox = remover->prox;
-            }
-        }
+        aux = aux->prox;
+    }
+
+    if (aux->prox)
+    {
+        remover = aux->prox;
+        aux->prox = remover->prox;
+        lista->tam--;
     }
     return remover;
 }
 
-void BuscaElemento(Lista* lista, int num)
+NoCabeca* BuscaElementoCabeca(ListaCabeca* lista, int num)
 {
-    No* no = lista->inicio;
+    NoCabeca* aux = lista->cabeca->prox;
 
-    int posicao = 1;
-    int achou = 0;
-
-    while (no)
+    while (aux)
     {
-        if (no->valor == num)
+        if (aux->valor == num)
         {
-            printf("Valor: %d - Posicao: %d ", no->valor, posicao);
-            achou = 1;
+            return aux;
         }
-
-        no = no->prox;
-        posicao++;
+        aux = aux->prox;
     }
-
-    if (!achou)
-    {
-        printf("Valor nao encontrado na lista.\n");
-    }
+    return NULL;
 }
 
-void DestruirLista(Lista* lista)
+void DestruirListaCabeca(ListaCabeca* lista)
 {
-    No* atual = lista->inicio;
-    No* proximo;
+    NoCabeca* atual = lista->cabeca->prox;
+    NoCabeca* proximo;
 
     while (atual)
     {
@@ -314,20 +246,20 @@ void DestruirLista(Lista* lista)
         atual = proximo;
     }
 
-    lista->inicio = NULL;
+    lista->cabeca->prox = NULL;
     lista->tam = 0;
 }
 
-void atvfacil1()
+void atvintermediario1()
 {
     system(CLEAR_COMMAND);
 
     int opcao = 0, valor = 0, anterior = 0;
-    No* remover = NULL;
+    NoCabeca* remover = NULL;
 
-    Lista lista;
+    ListaCabeca lista;
 
-    CriarLista(&lista);
+    CriarListaCabeca(&lista);
 
     do
     {
@@ -348,28 +280,28 @@ void atvfacil1()
         case 1:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor: ", 1, 100);
-            InserirNoInicio(&lista, valor);
+            InserirInicioCabeca(&lista, valor);
             break;
         case 2:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
             anterior = LerNumero("Digite o valor de referencia: ", 1, 100);
-            InserirNoMeio(&lista, valor, anterior);
+            InserirMeioCabeca(&lista, valor, anterior);
             break;
         case 3:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-            InserirNoFim(&lista, valor);
+            InserirFimCabeca(&lista, valor);
             break;
         case 4:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-            InserirOrdenado(&lista, valor);
+            InserirOrdenadoCabeca(&lista, valor);
             break;
         case 5:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser removido: ", 1, 100);
-            remover = Removido(&lista, valor);
+            remover = RemovidoCabeca(&lista, valor);
 
             if (remover)
             {
@@ -381,15 +313,15 @@ void atvfacil1()
         case 6:
             system(CLEAR_COMMAND);
             valor = LerNumero("Digite um valor a ser encontrado: ", 1, 100);
-            BuscaElemento(&lista, valor);
+            BuscaElementoCabeca(&lista, valor);
             break;
         case 7:
             system(CLEAR_COMMAND);
-            DestruirLista(&lista);
+            DestruirListaCabeca(&lista);
             break;
         case 8:
             system(CLEAR_COMMAND);
-            Imprimir(lista);
+            ImprimirCabeca(lista);
             break;
         default:
             if (opcao != 0)
@@ -400,4 +332,31 @@ void atvfacil1()
     } while (opcao != 0);
 
     return;
+}
+
+int main()
+{
+    system(CLEAR_COMMAND);
+
+    int selecionarDificuldade = 0;
+
+    selecionarDificuldade = LerNumero(
+        "EXERCICIOS\n\n"
+        "1 = Lista Com No Cabeça\n"
+        "Selecione: ", 1, 1);
+
+    switch (selecionarDificuldade)
+    {
+    case 1:
+    {
+        atvintermediario1();
+    }
+    break;
+
+    default:
+    {
+        printf("Selecione um exercicio valido");
+    }
+    }
+    return 0;
 }
