@@ -79,7 +79,7 @@ typedef struct noCabeca
 
 typedef struct listaCabeca
 {
-    NoCabeca* cabeca; //No sentinela, nunca guarda um valor de dado valido
+    NoCabeca* cabeca;
     int tam;
 }ListaCabeca;
 
@@ -147,7 +147,6 @@ void InserirMeioCabeca(ListaCabeca* lista, int num, int ant)
     {
         novo->valor = num;
 
-        //Sempre parte da cabeca -> nunca precisa tratar lista vazia
         aux = lista->cabeca;
         while (aux->prox && aux->valor != ant)
         {
@@ -171,7 +170,6 @@ void InserirOrdenadoCabeca(ListaCabeca* lista, int num)
     {
         novo->valor = num;
 
-        //A cabeca sempre existe, entao busca-se a posicao a partir dela
         aux = lista->cabeca;
         while (aux->prox && aux->prox->valor < num)
         {
