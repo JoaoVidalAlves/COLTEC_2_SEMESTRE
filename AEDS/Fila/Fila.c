@@ -123,28 +123,25 @@ void CriarFila(Fila* fila)
 
 void InserirNoFim(Fila* fila, int num)
 {
-    No* aux, * novo = malloc(sizeof(No));
+    No* aux = NULL, * novo = malloc(sizeof(No));
 
     if (novo)
     {
         novo->valor = num;
         novo->prox = NULL;
+        aux = fila->inicio;
 
         //É o primeiro?
         if (fila->inicio == NULL)
         {
             //Se for o primeiro aponta para o novo.
             fila->inicio = novo;
+            fila->fim = novo;
         }
         else
         {
-            //Percorre a fila para adicionar no final.
-            aux = fila->inicio;
-            while (aux->prox)
-            {
-                aux = aux->prox;
-            }
-            aux->prox = novo;
+            fila->fim->prox = novo;
+            fila->fim = novo;
         }
         fila->tam++;
     }
@@ -181,6 +178,7 @@ No* Removido(Fila* fila)
         aux = fila->inicio;
         remover = aux;
         fila->inicio = remover->prox;
+        fila->tam--;
     }
     return remover;
 }
