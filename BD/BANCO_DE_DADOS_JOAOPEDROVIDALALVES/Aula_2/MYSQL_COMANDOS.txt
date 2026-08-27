@@ -1,0 +1,29 @@
+ROTEIRO 1
+
+1 - SELECT * FROM livro WHERE assunto = 'P';
+2 - SELECT * FROM livro WHERE preco >= 30 AND preco <=50;
+3 - SELECT * FROM editora WHERE nome LIKE '%Editora%';
+4 - SELECT * FROM livro WHERE lancamento IS NULL;
+
+ROTEIRO 2
+
+1 - SELECT COUNT(*) FROM livro;
+2 - SELECT SUM(preco) FROM livro WHERE assunto = 'B';
+3 - SELECT AVG(preco) FROM livro WHERE lancamento IS NOT NULL;
+4 - SELECT MAX(preco) AS maior_preco, MIN(preco) AS menor_preco FROM livro;
+
+ROTEIRO 3
+
+1 - SELECT nome AS Editora FROM editora ORDER BY nome ASC;
+2 - SELECT titulo, preco FROM livro ORDER BY preco DESC;
+3 - SELECT codigo, preco, preco * 1.1 AS Preco10, preco * 1.2 AS Preco20, preco * 1.3 AS Preco30 FROM livro;
+4 - SELECT titulo FROM livro WHERE LENGTH(titulo) >= 20;
+
+ROTEIRO 4
+
+ROTEIRO 5 
+
+ROTEIRO 6
+ 
+ROTEIRO 7
+

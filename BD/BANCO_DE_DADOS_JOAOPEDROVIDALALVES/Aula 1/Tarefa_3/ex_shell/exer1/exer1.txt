@@ -1,0 +1,3 @@
+(f) Responda: qual o tamanho do arquivo criado?
+
+Resposta: 60 bytes.

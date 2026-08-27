@@ -1,0 +1,36 @@
+Atividade 3.1
+
+A - select produto, categoria, valor_unitario from vendas;
+B - select nome from clientes order by nome desc;
+C - select produto, data_venda from vendas order by data_venda asc limit 3;
+
+Atividade 4.1
+
+A - select nome, data_cadastro from clientes where data_cadastro >= 2024-06-30;
+B - select produto, forma_pagamento AS FPGMT from vendas where forma_pagamento = "Pix";
+C - select produto, valor_unitario from vendas where valor_unitario between 100 and 500;
+D - select nome from clientes where nome like "%a";
+E - select nome from clientes where email IS NOT NULL;
+
+Atividade 5.1
+
+A - select nome, estado, ativo from clientes where ativo = 1 AND (estado = "MG" OR estado = "SP"); 
+B - select produto, categoria, quantidade from vendas where categoria = "Acessórios" AND quantidade > 2;
+C - select vendedor, produto, categoria, quantidade from vendas where (categoria = "Acessórios" OR categoria = "Àudio") AND vendedor = "Ana Souza";
+D - select nome, email, ativo from clientes where ativo = 1 and email is not null;
+
+Atividade 6.1
+
+A - select count(*) from clientes where ativo = 1;  
+B - select sum(quantidade) from vendas;
+C - SELECT MAX(valor_unitario), MIN(valor_unitario) FROM vendas where categoria = "Acessórios";
+D - SELECT sum(quantidade * valor_unitario) AS Faturamento_da_Ana_Souza from vendas where vendedor = "Ana Souza";
+E - select distinct count(cidade) from clientes;
+
+Atividade 7.1
+
+A - select count(nome), estado from clientes group by estado; 
+B - select sum(valor_unitario * quantidade) AS total_vendas, forma_pagamento from vendas group by forma_pagamento order by total_vendas asc; 
+C -
+D -
+E - 
