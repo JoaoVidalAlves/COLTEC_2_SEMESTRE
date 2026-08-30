@@ -101,12 +101,85 @@ int main()
     return 0;
 }
 
+typedef struct Fila_V
+{
+    int valor[100];
+    int fim;
+}Fila_V;
+
+void InicializarFila(Fila_V* f)
+{
+    for (int i = 0; i < 100; i++)
+    {
+        f->valor[i] = 0;
+    }
+    f->fim = 0;
+}
+
+void Enfileirar(int num, Fila_V* f)
+{
+    if (f->fim == 100)
+    {
+        printf("Fila cheia!\n");
+        return;
+    }
+    else
+    {
+        f->valor[f->fim] = num;
+        f->fim++;
+    }
+}
+
+void Desenfileirar(Fila_V* f)
+{
+    int num = 0, i = 0;
+
+    if (f->fim == 0)
+    {
+        printf("Fila está vazia!\n");
+        return;
+    }
+    else
+    {
+        //num = f->valor[0];
+        for (int i = 0; i<f->fim; i++)
+        {
+            f->valor[i] = f->valor[i + 1];
+        }
+        f->fim--;
+        return;
+    }
+}
+
+void Percorrer(Fila_V* f)
+{
+    int i;
+
+    printf("Imprimindo a fila:\n");
+
+    for (i = 0; i < f->fim; i++)
+    {
+        printf("%d ", f->valor[i]);
+    }
+}
+
+void ConsultarFrente(Fila_V* f)
+{
+    int i;
+
+    printf("Imprimindo o 1º elemento:\n");
+    printf("%d ", f->valor[0]);
+}
 
 void atividade()
 {
     system(CLEAR_COMMAND);
 
-    int opcao = 0, valor = 0, anterior = 0;
+    int opcao = 0, valorInserir = 0;
+
+    Fila_V fila_v;
+
+    InicializarFila(&fila_v);
 
     do
     {
@@ -116,33 +189,27 @@ void atividade()
             "2 - Desenfileirar\n\t"
             "3 - Percorrer\n\t"
             "4 - Consultar Frente\n\t"
-            "5 - Destruir Fila\n\t"
-            "Selecione: ", 0, 5);
+            "Selecione: ", 0, 4);
 
         switch (opcao)
         {
         case 1:
             system(CLEAR_COMMAND);
-            valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-
+            valorInserir = LerNumero("Digite um valor a ser inserido: ", 1, 100);
+            Enfileirar(valorInserir, &fila_v);
             break;
         case 2:
             system(CLEAR_COMMAND);
-
+            Desenfileirar(&fila_v);
             break;
         case 3:
             system(CLEAR_COMMAND);
-
+            Percorrer(&fila_v);
             break;
         case 4:
             system(CLEAR_COMMAND);
-
+            ConsultarFrente(&fila_v);
             break;
-        case 5:
-            system(CLEAR_COMMAND);
-
-            break;
-
         default:
             if (opcao != 0)
             {
