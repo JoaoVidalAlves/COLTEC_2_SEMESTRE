@@ -82,7 +82,7 @@ int main()
 
     selecionarDificuldade = LerNumero(
         "EXERCICIO FILA\n\n"
-        "1 = FILA\n"
+        "1 = FILA CIRCULAR VETORES\n"
         "Selecione: ", 1, 1);
 
     switch (selecionarDificuldade)
@@ -104,8 +104,10 @@ int main()
 typedef struct Fila_V
 {
     int valor[100];
+    int inicio;
     int fim;
-}Fila_V;
+    int quantidade;
+} Fila_V;
 
 void InicializarFila(Fila_V* f)
 {
@@ -113,62 +115,59 @@ void InicializarFila(Fila_V* f)
     {
         f->valor[i] = 0;
     }
+    f->inicio = 0;
     f->fim = 0;
+    f->quantidade = 0;
 }
 
 void Enfileirar(int num, Fila_V* f)
 {
-    if (f->fim == 100)
+    if (f->quantidade == 100)
     {
         printf("Fila cheia!\n");
         return;
     }
-    else
-    {
-        f->valor[f->fim] = num;
-        f->fim++;
-    }
+
+    f->valor[f->fim] = num;
+    f->fim = (f->fim + 1) % 100;
+    f->quantidade++;
 }
 
 void Desenfileirar(Fila_V* f)
 {
-    int num = 0, i = 0;
-
-    if (f->fim == 0)
+    if (f->quantidade == 0)
     {
         printf("Fila está vazia!\n");
         return;
     }
-    else
-    {
-        //num = f->valor[0];
-        for (int i = 0; i<f->fim; i++)
-        {
-            f->valor[i] = f->valor[i + 1];
-        }
-        f->fim--;
-        return;
-    }
+
+    f->inicio = (f->inicio + 1) % 100;   // anda em círculo
+    f->quantidade--;
 }
 
 void Percorrer(Fila_V* f)
 {
-    int i;
-
     printf("Imprimindo a fila:\n");
 
-    for (i = 0; i < f->fim; i++)
+    for (int i = 0; i < f->quantidade; i++)
     {
-        printf("%d ", f->valor[i]);
+        int indice = (f->inicio + i) % 100;
+        printf("%d ", f->valor[indice]);
     }
+    printf("\n");
 }
 
 void ConsultarFrente(Fila_V* f)
 {
-    int i;
+    if (f->quantidade == 0)
+    {
+        printf("Fila está vazia!\n");
+        return;
+    }
 
     printf("Imprimindo o 1º elemento:\n");
-    printf("%d ", f->valor[0]);
+    printf("%d ", f->valor[f->inicio]);
+    printf("\n");
 }
 
 void atividade()
