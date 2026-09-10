@@ -8,54 +8,75 @@ public:
 
     void inicializar(string nome, int totalVagas, int totalHoras) {
         nomeDisciplina = nome;
+        
         setCargaHoraria(totalHoras);
-        if (totalVagas > 0) {
+
+        if (totalVagas > 0) 
+        {
             vagas = totalVagas;
-        } else {
+        } 
+        else 
+        {
             vagas = 0;
         }
+        
         matriculados = 0;
     }
 
-    string getNomeDisciplina(){
+    string getNomeDisciplina()
+    {
         return nomeDisciplina;
     } 
 
-    void setNomeDisciplina(string nome){
+    void setNomeDisciplina(string nome)
+    {
         nomeDisciplina = nome;
     } 
 
-    void setCargaHoraria(int horas) {
-        if (horas > 0) {
+    void setCargaHoraria(int horas) 
+    {
+        if (horas > 0) 
+        {
             cargaHoraria = horas;
-        } else {
+        } 
+        else 
+        {
             cout << "Carga horaria invalida, valor ignorado." << endl;
         }
     }
 
-    int getCargaHoraria() {
+    int getCargaHoraria() 
+    {
         return cargaHoraria;
     }
 
-    void matricular() {
-        if (matriculados < vagas) {
+    void matricular() 
+    {
+        if (matriculados < vagas) 
+        {
             matriculados++;
-        } else {
+        } 
+        else 
+        {
             cout << "Turma lotada." << endl;
         }
     }
 
-    void cancelarMatricula() {
-        if (matriculados > 0) {
+    void cancelarMatricula() 
+    {
+        if (matriculados > 0) 
+        {
             matriculados--;
         }
     }
 
-    int getMatriculados() {
+    int getMatriculados() 
+    {
         return matriculados;
     }
 
-    void mensagem(){
+    void mensagem()
+    {
         cout << "Bem vindos à disciplina de " << getNomeDisciplina() << "!" << endl;
     }
 

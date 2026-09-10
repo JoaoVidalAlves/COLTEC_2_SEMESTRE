@@ -95,8 +95,6 @@ int main()
     return 0;
 }
 
-/* ---------- Estrutura base de uma fila (lista encadeada simples) ---------- */
-
 typedef struct no
 {
     int senha;              // numero/identificador do cliente
