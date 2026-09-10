@@ -82,7 +82,7 @@ int main()
 
     selecionarDificuldade = LerNumero(
         "EXERCICIO FILA\n\n"
-        "1 = FILA\n"
+        "1 = FILA LISTA ENCADEADA\n"
         "Selecione: ", 1, 1);
 
     switch (selecionarDificuldade)

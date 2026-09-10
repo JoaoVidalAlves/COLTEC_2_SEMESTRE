@@ -1,0 +1,350 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef _WIN32
+#define CLEAR_COMMAND "cls"
+#else
+#define CLEAR_COMMAND "clear"
+#endif
+
+int LerNumero(const char* mensagem, int minimo, int maximo)
+{
+    char entrada[100];
+    char* fim;
+    long valor;
+
+    while (1)
+    {
+        printf("%s", mensagem);
+
+        if (fgets(entrada, sizeof(entrada), stdin) == NULL)
+            continue;
+
+        /* Remove o '\n' */
+        entrada[strcspn(entrada, "\n")] = '\0';
+
+        /* Converte para número */
+        valor = strtol(entrada, &fim, 10);
+
+        /* Verifica se toda a entrada era numérica */
+        if (*entrada == '\0' || *fim != '\0')
+        {
+            printf("Entrada invalida. Digite apenas numeros.\n\n");
+            continue;
+        }
+
+        /* Verifica intervalo */
+        if (valor < minimo || valor > maximo)
+        {
+            printf("Valor invalido - Min %d, Max %d.\n\n",
+                minimo, maximo);
+            continue;
+        }
+
+        return (int)valor;
+    }
+}
+
+void LerTexto(const char* mensagem, char texto[], int tamanho)
+{
+    while (1)
+    {
+        printf("%s", mensagem);
+
+        if (fgets(texto, tamanho, stdin) == NULL)
+            continue;
+
+        /* Se encontrou '\n', remove */
+        if (strchr(texto, '\n') != NULL)
+        {
+            texto[strcspn(texto, "\n")] = '\0';
+            return;
+        }
+
+        /* Buffer não terminou -> usuário digitou mais caracteres */
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF);
+
+        printf("Valor invalido - Max %d caracteres.\n\n",
+            tamanho - 1);
+    }
+}
+
+//DECLARAR PROTOTIPOS DO MENU E ATIVIDADES
+void atividade();
+
+int main()
+{
+    system(CLEAR_COMMAND);
+
+    int selecionarDificuldade = 0;
+
+    selecionarDificuldade = LerNumero(
+        "EXERCICIO DEQUE\n\n"
+        "1 = DEQUE LISTA DUPLAMENTE ENCADEADA\n"
+        "Selecione: ", 1, 1);
+
+    switch (selecionarDificuldade)
+    {
+        case 1:
+        {
+            atividade();
+        }
+        break;
+
+        default:
+        {
+            printf("Selecione um exercicio valido");
+        }
+    }
+    return 0;
+}
+
+typedef struct no
+{
+    int valor;
+    struct no* prox;
+    struct no* anterior;
+}No;
+
+typedef struct fila
+{
+    No* inicio;
+    No* fim;
+    int tam;
+}Fila;
+
+void CriarFila(Fila* fila)
+{
+    fila->inicio = NULL;
+    fila->fim = NULL;
+    fila->tam = 0;
+}
+
+void InserirNoFim(Fila* fila, int num)
+{
+    No* novo = malloc(sizeof(No));
+
+    if (novo)
+    {
+        novo->valor = num;
+        novo->prox = NULL;
+        novo->anterior = fila->fim;
+
+        if (fila->inicio == NULL)
+        {
+            fila->inicio = novo;
+            fila->fim = novo;
+        }
+        else
+        {
+            fila->fim->prox = novo;
+            fila->fim = novo;
+        }
+        fila->tam++;
+    }
+}
+
+void InserirNoInicio(Fila* fila, int num)
+{
+    No* novo = malloc(sizeof(No));
+
+    if (novo)
+    {
+        novo->valor = num;
+        novo->anterior = NULL;
+        novo->prox = fila->inicio;
+
+        if (fila->inicio == NULL)
+        {
+            fila->inicio = novo;
+            fila->fim = novo;
+        }
+        else
+        {
+            fila->inicio->anterior = novo;
+            fila->inicio = novo;
+        }
+        fila->tam++;
+    }
+}
+
+No* RemoverDoInicio(Fila* fila)
+{
+    No* remover = NULL;
+
+    if (fila->inicio)
+    {
+        remover = fila->inicio;
+        fila->inicio = remover->prox;
+
+        if (fila->inicio != NULL)
+            fila->inicio->anterior = NULL;
+        else
+            fila->fim = NULL;
+
+        fila->tam--;
+    }
+    return remover;
+}
+
+No* RemoverDoFim(Fila* fila)
+{
+    No* remover = NULL;
+
+    if (fila->fim)
+    {
+        remover = fila->fim;
+        fila->fim = remover->anterior;
+
+        if (fila->fim != NULL)
+            fila->fim->prox = NULL;
+        else
+            fila->inicio = NULL;
+
+        fila->tam--;
+    }
+    return remover;
+}
+
+void Imprimir(Fila fila)
+{
+    No* no = fila.inicio;
+
+    printf("\n\tFila tamanho %d: ", fila.tam);
+
+    while (no)
+    {
+        printf("%d ", no->valor);
+        no = no->prox;
+    }
+}
+
+void ImprimirFrente(Fila fila)
+{
+    if (fila.inicio == NULL)
+    {
+        printf("\n\tDeque vazio!\n");
+        return;
+    }
+    printf("\n\tPrimeiro elemento: %d ", fila.inicio->valor);
+}
+
+void ImprimirFim(Fila fila)
+{
+    if (fila.fim == NULL)
+    {
+        printf("\n\tDeque vazio!\n");
+        return;
+    }
+    printf("\n\tUltimo elemento: %d ", fila.fim->valor);
+}
+
+void DestruirFila(Fila* fila)
+{
+    No* atual = fila->inicio;
+    No* proximo;
+
+    while (atual)
+    {
+        proximo = atual->prox;
+        free(atual);
+        atual = proximo;
+    }
+
+    fila->inicio = NULL;
+    fila->fim = NULL;
+    fila->tam = 0;
+}
+
+void atividade()
+{
+    system(CLEAR_COMMAND);
+
+    int opcao = 0, valor = 0;
+    No* remover = NULL;
+
+    Fila fila;
+
+    CriarFila(&fila);
+
+    do
+    {
+        opcao = LerNumero(
+            "\n\t 0 - Sair\n\t"
+            "1 - Inserir no Inicio\n\t"
+            "2 - Inserir no Fim\n\t"
+            "3 - Remover do Inicio\n\t"
+            "4 - Remover do Fim\n\t"
+            "5 - Percorrer\n\t"
+            "6 - Consultar Frente\n\t"
+            "7 - Consultar Fim\n\t"
+            "8 - Destruir Deque\n\t"
+            "Selecione: ", 0, 8);
+
+        switch (opcao)
+        {
+        case 1:
+            system(CLEAR_COMMAND);
+            valor = LerNumero("Digite um valor a ser inserido no inicio: ", 1, 100);
+            InserirNoInicio(&fila, valor);
+            break;
+        case 2:
+            system(CLEAR_COMMAND);
+            valor = LerNumero("Digite um valor a ser inserido no fim: ", 1, 100);
+            InserirNoFim(&fila, valor);
+            break;
+        case 3:
+            system(CLEAR_COMMAND);
+            remover = RemoverDoInicio(&fila);
+            if (remover)
+            {
+                printf("Removido do inicio: %d\n", remover->valor);
+                free(remover);
+            }
+            else
+            {
+                printf("Deque vazio!\n");
+            }
+            break;
+        case 4:
+            system(CLEAR_COMMAND);
+            remover = RemoverDoFim(&fila);
+            if (remover)
+            {
+                printf("Removido do fim: %d\n", remover->valor);
+                free(remover);
+            }
+            else
+            {
+                printf("Deque vazio!\n");
+            }
+            break;
+        case 5:
+            system(CLEAR_COMMAND);
+            Imprimir(fila);
+            break;
+        case 6:
+            system(CLEAR_COMMAND);
+            ImprimirFrente(fila);
+            break;
+        case 7:
+            system(CLEAR_COMMAND);
+            ImprimirFim(fila);
+            break;
+        case 8:
+            system(CLEAR_COMMAND);
+            DestruirFila(&fila);
+            break;
+
+        default:
+            if (opcao != 0)
+            {
+                printf("Opcao Invalida!\n");
+            }
+        }
+    } while (opcao != 0);
+
+    return;
+}
