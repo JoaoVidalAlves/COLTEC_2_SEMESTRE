@@ -28,10 +28,9 @@ class Cliente
     private:
     
     string m_nomeCliente;
+    Endereco ende1;
 
     public:
-
-    Endereco ende1;
 
     Cliente (string nome, string rua, int numero, string cidade)
         : m_nomeCliente(nome), ende1(rua, numero, cidade)

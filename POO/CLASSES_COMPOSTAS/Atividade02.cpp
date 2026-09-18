@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cmath>
 
 using namespace std;
 
@@ -35,18 +34,18 @@ class Retangulo
 {
     private:
     
-    Ponto p1, p2;
+    Ponto inferiorEsq, superiorDir;
 
     public:
 
     Retangulo(Ponto infEsq, Ponto SupDir)
-        : p1(infEsq), p2(SupDir)
+        : inferiorEsq(infEsq), superiorDir(SupDir)
     {}
 
     float Area() const
     {
-        float largura = p1.getX() - p2.getX();
-        float altura = p1.getY() - p2.getY();
+        float largura = inferiorEsq.getX() - superiorDir.getX();
+        float altura = inferiorEsq.getY() - superiorDir.getY();
 
         return largura * altura;
     }
@@ -54,12 +53,12 @@ class Retangulo
     void Exibir() const
     {
         cout << "Canto inferior esquerdo: ";
-        p1.Exibir();
+        inferiorEsq.Exibir();
 
         cout << endl;
 
         cout << "Canto superior direito: ";
-        p2.Exibir();
+        superiorDir.Exibir();
 
         cout << endl;
     }
