@@ -1,0 +1,146 @@
+#Atividade 4.1
+#Classifique o formato retornado por cada consulta:
+#a) SELECT COUNT(*) FROM clientes;
+#RES: Escalar
+
+#b) SELECT id_cliente FROM vendas;
+#RES: Coluna
+
+#c) SELECT nome, estado FROM clientes WHERE id_cliente = 1;
+#RES:Linha
+
+#d) SELECT id_cliente, COUNT(*) FROM vendas GROUP BY id_cliente;
+#RES:Tabela
+
+#e) SELECT AVG(preco) FROM produtos WHERE categoria = ’Telefonia’;
+#RES: Escalar
+
+#Atividade 5.1
+#Escreva subconsultas escalares para:
+
+#a) listar produtos acima da média dos preços;
+SELECT nome_produto, preco FROM produtos WHERE preco > (SELECT AVG(preco) FROM produtos) ORDER BY preco DESC;
+
+#b) encontrar o produto de menor preço;
+SELECT nome_produto, preco FROM produtos WHERE preco = (SELECT MIN(preco) FROM produtos);
+
+#c) encontrar vendas realizadas na data mais recente;
+SELECT id_venda, data_venda FROM vendas WHERE data_venda >= (SELECT MAX(data_venda) FROM vendas);
+
+#d) listar produtos com custo acima do custo médio;
+SELECT nome_produto, custo_aquisicao FROM produtos WHERE custo_aquisicao > ( SELECT AVG(custo_aquisicao) FROM produtos);
+
+#e) encontrar produtos cuja margem preco - custo_aquisicao esteja acima da margem média.
+SELECT nome_produto, preco - custo_aquisicao AS margem FROM produtos WHERE preco - custo_aquisicao > (SELECT AVG(preco - custo_aquisicao) FROM produtos) ORDER BY nome_produto;
+
+#Atividade 6.1
+#Use IN para:
+
+#a) listar clientes que já compraram;
+SELECT id_cliente, nome, cidade FROM clientes WHERE id_cliente IN (SELECT id_cliente FROM vendas) ORDER BY nome;
+
+#b) listar produtos que já foram vendidos;
+#c) listar clientes que compraram com Cartão;
+#d) listar produtos vendidos em abril de 2025;
+#e) listar clientes que compraram produtos da categoria Telefonia;
+#f) listar produtos comprados por clientes do estado de São Paulo.
+
+#Atividade 7.1
+#Responda e execute:
+
+#a) liste os clientes que nunca compraram usando NOT IN;
+SELECT id_cliente, nome, cidade FROM clientes WHERE id_cliente NOT IN (SELECT id_cliente FROM vendas) ORDER BY nome;
+
+#b) liste os produtos nunca vendidos usando NOT IN;
+#c) explique o efeito de NULL em NOT IN;
+#d) reescreva os itens a e b usando NOT EXISTS;
+#e) explique por que id_produto em vendas não pode ser nulo.
+
+#Atividade 8.1
+#Escreva consultas para encontrar:
+
+#a) produtos mais caros que pelo menos um produto de Telefonia;
+SELECT nome_produto, categoria, preco FROM produtos WHERE preco >= ANY (SELECT preco FROM produtos WHERE categoria = 'Telefonia') ORDER BY preco;
+
+#b) produtos mais caros que todos os produtos de Acessórios;
+#c) produtos mais baratos que todos os produtos de Escritório;
+#d) produtos cujo preço coincida com algum preço da categoria Informática;
+#e) uma versão com MAX equivalente ao item b, considerando o conjunto existente e sem valores nulos.
+
+#Atividade 9.1
+#Use comparações de tuplas para:
+
+#a) encontrar produtos com a mesma categoria e preço do produto 3;
+SELECT nome_produto, categoria, preco FROM produtos WHERE categoria = (SELECT categoria WHERE id_produto = 3) AND preco = (SELECT preco WHERE id_produto = 3);
+
+#b) encontrar vendas com o mesmo cliente e produto da venda 1;
+#c) comparar cidade e estado com os dados do cliente 1;
+#d) explicar o erro de comparar uma coluna com uma subconsulta de duas colunas;
+#e) explicar por que = não aceita várias linhas nesse formato.
+
+#Atividade 10.1
+#Escreva consultas para:
+
+#a) encontrar o produto mais caro de cada categoria;
+SELECT nome_produto, preco, categoria FROM produtos WHERE (categoria, preco) IN (SELECT categoria, MAX(preco) FROM produtos GROUP BY categoria);
+
+#b) encontrar o produto mais barato de cada categoria;
+#c) encontrar a venda mais recente de cada cliente;
+#d) encontrar a venda de maior valor unitário de cada produto;
+#e) explicar quantas colunas a subconsulta deve retornar em cada caso.
+
+#Atividade 11.1
+#Use subconsultas no FROM para:
+
+#a) calcular o total gasto por cliente;
+SELECT resumo.id_cliente, resumo.total_gasto FROM (SELECT id_cliente, SUM(quantidade * valor_unitario) AS total_gasto FROM vendas GROUP BY id_cliente) AS resumo;
+
+#b) calcular a média dos totais gastos pelos clientes que compraram;
+#c) listar apenas totais superiores a 1.500;
+#d) mostrar o nome do cliente junto de seu total gasto;
+#e) incluir clientes sem compras e exibir zero;
+#f) calcular a média do faturamento total por categoria.
+
+#Atividade 12.1
+#Crie subconsultas correlacionadas para:
+
+#a) encontrar produtos acima da média da própria categoria;
+SELECT p1.nome_produto, p1.categoria, p1.preco FROM produtos AS p1 WHERE p1.preco > ( SELECT AVG(p2.preco) FROM produtos AS p2 WHERE p2.categoria = p1.categoria);
+
+#b) encontrar o produto mais barato de cada categoria;
+#c) encontrar a venda mais recente de cada cliente;
+#d) encontrar vendas acima da média de preço do mesmo produto;
+#e) encontrar produtos com margem superior à margem média da própria categoria.
+
+#Atividade 13.1
+#Use EXISTS ou NOT EXISTS para:
+
+#a) encontrar clientes que compraram;
+SELECT c.nome FROM clientes AS c WHERE EXISTS ( SELECT 1 FROM vendas AS v WHERE v.id_cliente = c.id_cliente);
+
+#b) encontrar clientes que nunca compraram;
+#c) encontrar produtos que nunca foram vendidos;
+#d) encontrar clientes que pagaram alguma compra por Pix;
+#e) encontrar clientes que compraram algum produto de Informática;
+#f) encontrar produtos que nunca foram comprados por clientes de MG.
+
+#Atividade 14.1
+#Acrescente ao resultado de cada cliente:
+
+#a) a quantidade total de compras;
+SELECT c.nome, (SELECT COUNT(*) FROM vendas AS v WHERE v.id_cliente = c.id_cliente) AS compras FROM clientes AS c;
+
+#b) o total gasto;
+#c) a data da compra mais recente;
+#d) o maior valor unitário já pago;
+#e) a quantidade de compras pagas por Pix.
+
+#Atividade 15.1
+#Use HAVING e subconsultas para:
+
+#a) encontrar categorias cuja média de preços supera a média geral;
+SELECT categoria, AVG(preco) AS media_categoria FROM produtos GROUP BY categoria HAVING AVG(preco) > (SELECT AVG(preco) FROM produtos);
+
+#b) encontrar clientes com gasto total acima da média dos totais;
+#c) encontrar produtos cuja quantidade vendida supera a média das quantidades totais vendidas por produto;
+#d) explicar por que a comparação do total agrupado não deve ser feita no WHERE.
