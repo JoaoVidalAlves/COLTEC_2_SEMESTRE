@@ -11,7 +11,7 @@
 int LerNumero(const char* mensagem, int minimo, int maximo)
 {
     char entrada[100];
-    char* fim;
+    char* topo;
     long valor;
 
     while (1)
@@ -25,10 +25,10 @@ int LerNumero(const char* mensagem, int minimo, int maximo)
         entrada[strcspn(entrada, "\n")] = '\0';
 
         /* Converte para número */
-        valor = strtol(entrada, &fim, 10);
+        valor = strtol(entrada, &topo, 10);
 
         /* Verifica se toda a entrada era numérica */
-        if (*entrada == '\0' || *fim != '\0')
+        if (*entrada == '\0' || *topo != '\0')
         {
             printf("Entrada invalida. Digite apenas numeros.\n\n");
             continue;
@@ -101,155 +101,48 @@ int main()
     return 0;
 }
 
-typedef struct Nivel
-{
-    int valor;
-    struct Nivel* prox;
-}Nivel;
-
-typedef struct Pilha
-{
-    Topo* base;
-    Topo* topo;
-    int tam;
-}Pilha;
-
-void CriarPilha(Pilha* pilha)
-{
-    pilha->inicio = NULL;
-    pilha->fim = NULL;
-    pilha->tam = 0;
-}
-
-void InserirNoFim(Pilha* pilha, int num)
-{
-    No* aux = NULL, * novo = malloc(sizeof(No));
-
-    if (novo)
-    {
-        novo->valor = num;
-        novo->prox = NULL;
-        aux = pilha->inicio;
-
-        //É o primeiro?
-        if (pilha->inicio == NULL)
-        {
-            //Se for o primeiro aponta para o novo.
-            pilha->inicio = novo;
-            pilha->fim = novo;
-        }
-        else
-        {
-            pilha->fim->prox = novo;
-            pilha->fim = novo;
-        }
-        pilha->tam++;
-    }
-}
-
-void Imprimir(Pilha pilha)
-{
-    No* no = pilha.inicio;
-
-    printf("\n\tFila tamanho %d: ", pilha.tam);
-
-    while (no)
-    {
-        printf("%d ", no->valor);
-        no = no->prox;
-    }
-}
-
-void ImprimirFrente(Pilha pilha)
-{
-    No* no = pilha.inicio;
-
-    printf("\n\tFila tamanho %d: ", pilha.tam);
-
-    printf("%d ", no->valor);
-}
-
-No* Removido(Pilha* pilha)
-{
-    No* aux, * remover = NULL, * anterior = NULL;
-
-    if (pilha->inicio)
-    {
-        aux = pilha->inicio;
-        remover = aux;
-        pilha->inicio = remover->prox;
-        pilha->tam--;
-    }
-    return remover;
-}
-
-void DestruirFila(Pilha* pilha)
-{
-    No* atual = pilha->inicio;
-    No* proximo;
-
-    while (atual)
-    {
-        proximo = atual->prox;
-        free(atual);
-        atual = proximo;
-    }
-
-    pilha->inicio = NULL;
-    pilha->tam = 0;
-}
-
 void atividade()
 {
     system(CLEAR_COMMAND);
 
-    int opcao = 0, valor = 0, anterior = 0;
-    No* remover = NULL;
+    int opcao = 0, valorInserir = 0;
 
-    Pilha pilha;
-
-    CriarFila(&pilha);
+    InicializarPilha(&pilha);
 
     do
     {
         opcao = LerNumero(
             "\n\t 0 - Sair\n\t"
-            "1 - Enfileirar\n\t"
-            "2 - Desenfileirar\n\t"
-            "3 - Percorrer\n\t"
-            "4 - Consultar Frente\n\t"
-            "5 - Destruir Pilha\n\t"
-            "Selecione: ", 0, 5);
+            "1 - Push\n\t"
+            "2 - Pop\n\t"
+            "3 - Peek\n\t"
+            "4 - Size\n\t"
+            "Selecione: ", 0, 4);
 
         switch (opcao)
         {
-        case 1:
-            system(CLEAR_COMMAND);
-            valor = LerNumero("Digite um valor a ser inserido: ", 1, 100);
-            InserirNoFim(&pilha, valor);
-            break;
-        case 2:
-            system(CLEAR_COMMAND);
-            Removido(&pilha);
-            break;
-        case 3:
-            system(CLEAR_COMMAND);
-            Imprimir(pilha);
-            break;
-        case 4:
-            system(CLEAR_COMMAND);
-            ImprimirFrente(pilha);
-            break;
-        case 5:
-            system(CLEAR_COMMAND);
-            DestruirFila(&pilha);
-            break;
-
-        default:
-            if (opcao != 0)
-            {
-                printf("Opcao Invalida!\n");
-            }
+            case 1:
+                system(CLEAR_COMMAND);
+                valorInserir = LerNumero("Digite um valor a ser inserido: ", 1, 100);
+                Push(valorInserir, &pilha);
+                break;
+            case 2:
+                system(CLEAR_COMMAND);
+                Pop(&pilha);
+                break;
+            case 3:
+                system(CLEAR_COMMAND);
+                Peek(&pilha);
+                break;
+            case 4:
+                system(CLEAR_COMMAND);
+                Size(&pilha);
+                break;
+            default:
+                if (opcao != 0)
+                {
+                    printf("Opcao Invalida!\n");
+                }
         }
     } while (opcao != 0);
 
