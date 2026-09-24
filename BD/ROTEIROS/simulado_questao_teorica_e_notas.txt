@@ -1,0 +1,83 @@
+SIMULADO DA PROVA 1 - INTRODUÇÃO A BANCO DE DADOS (COLTEC/UFMG)
+=================================================================
+
+QUESTÃO 4.1 - O QUE SÃO SUBCONSULTAS?
+-------------------------------------
+
+Uma subconsulta (ou "subquery") é uma consulta SQL escrita dentro de
+outra consulta (a "consulta externa"), geralmente dentro de uma
+cláusula WHERE, HAVING, FROM ou na lista de colunas do SELECT. Ela é
+usada quando o resultado de uma consulta depende do resultado de
+outra consulta menor, que é resolvida antes (ou junto) da consulta
+principal. Subconsultas permitem expressar filtros, comparações e
+cálculos que seriam difíceis ou impossíveis de escrever com um único
+SELECT simples.
+
+Subconsultas podem ser classificadas em dois tipos principais:
+
+1) SUBCONSULTA NÃO CORRELACIONADA
+   É uma subconsulta independente da consulta externa: ela pode ser
+   executada sozinha, sem precisar de nenhuma informação vinda da
+   consulta que a contém. O banco de dados normalmente a executa uma
+   única vez, e o resultado é reaproveitado pela consulta externa.
+
+   Exemplo (baseado nas tabelas do simulado):
+
+       SELECT id, nome, categoria, preco
+       FROM Produtos
+       WHERE preco > (SELECT AVG(preco) FROM Produtos);
+
+   Aqui, a subconsulta "SELECT AVG(preco) FROM Produtos" não depende
+   de nenhuma linha da consulta externa - ela calcula a média geral
+   uma única vez, e esse valor é usado para filtrar todos os produtos.
+
+2) SUBCONSULTA CORRELACIONADA
+   É uma subconsulta que depende de valores da consulta externa (ou
+   seja, referencia uma coluna de uma tabela declarada fora dela).
+   Por isso, ela não pode ser executada isoladamente: o banco de
+   dados a reexecuta (conceitualmente) para cada linha considerada
+   pela consulta externa.
+
+   Exemplo (baseado nas tabelas do simulado):
+
+       SELECT p.id, p.nome, p.categoria, p.preco
+       FROM Produtos p
+       WHERE p.preco > (
+           SELECT AVG(p2.preco)
+           FROM Produtos p2
+           WHERE p2.categoria = p.categoria
+       );
+
+   Aqui, a subconsulta usa "p.categoria", que vem da tabela Produtos
+   da consulta externa (alias p). Para cada produto p, a subconsulta
+   recalcula a média de preço apenas dos produtos da MESMA categoria
+   de p, por isso ela é correlacionada.
+
+Resumo da diferença:
+- Não correlacionada: independente, executada uma vez.
+- Correlacionada: depende da linha externa, reavaliada por linha.
+
+
+NOTAS SOBRE O ARQUIVO SQL (simulado_respostas.sql)
+---------------------------------------------------
+
+- Parte 1 (Prova1): assume que as tabelas Empregados e Financeiro já
+  existem no servidor, conforme informado no enunciado. Apenas a
+  tabela Departamentos é criada e populada.
+
+- Parte 2 (subconsultas): o enunciado não deixa explícito se as
+  tabelas Produtos, Vendedores e Vendas já estão no servidor. Para
+  deixar o script pronto para uso, incluí os comandos CREATE TABLE e
+  INSERT com os dados das Tabelas 4, 5 e 6. Se essas tabelas já
+  existirem no banco, basta remover esses trechos antes de executar.
+
+- Parte 3 (EmpresaC): esse é o esquema clássico de exercícios de
+  banco de dados com as tabelas:
+    Product(maker, model, type)
+    PC(model, speed, ram, hd, cd, price)
+    Laptop(model, speed, ram, hd, screen, price)
+    Printer(model, color, type, price)
+  Não há CREATE/INSERT para essas tabelas porque o enunciado indica
+  que o banco EmpresaC já está disponível no servidor. Se os nomes
+  exatos das colunas no servidor de vocês forem diferentes, ajuste as
+  consultas de acordo.
