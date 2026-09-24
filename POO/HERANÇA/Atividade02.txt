@@ -1,0 +1,52 @@
+DOMINIO: JOGOS
+
+CLASSE BASE: JOGO
+    ATRIBUTOS: STRING NOME;
+               FLOAT PREÇO;
+               INT ANO LANCAMENTO;
+               FLOAT TAMANHO;
+            
+    METODOS: EXIBIR, SETDADOS;
+
+CLASSES HIERARQUICAS: JOGO DE AÇÃO / JOGO DE RPG
+    ATRIBUTOS ESPECIFICOS: MECANICAS;
+
+    METODOS: EXIBIR, SETDADOS;
+
+
+class Jogo
+{
+private:
+    string nome;
+    float preco;
+    int anoLancamento;
+    float tamanho;
+
+public:
+    void setDados(...);
+    void exibir();
+};
+
+class JogoAcao : public Jogo
+{
+private:
+    string mecanicas;
+
+public:
+    void setDados(...);
+    void exibir();
+};
+
+class JogoRPG : public Jogo
+{
+private:
+    string mecanicas;
+
+public:
+    void setDados(...);
+    void exibir();
+};
+
+Trata-se de uma relação de herança porque Jogo de Ação e Jogo de RPG são tipos específicos de Jogo. 
+Todos os jogos possuem características comuns, como nome, preço, ano de lançamento e tamanho, que são definidas na classe base Jogo. 
+As classes derivadas adicionam características e comportamentos específicos de cada gênero.
