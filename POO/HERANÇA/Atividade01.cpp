@@ -5,7 +5,7 @@ using namespace std;
 
 class Veiculo
 {
-    private:
+    protected:
     string m_nome;
     int m_ano;
 
