@@ -22,12 +22,12 @@ public:
         std::cout << "Funcionario " << m_nome << " removido com sucesso!" << "\n";
     }    
 
-    float CalcularSalario()
+    virtual float CalcularSalario() const
     {
         return m_salarioBase;
     }
 
-    void Exibir() const
+    virtual void Exibir() const
     {
         std::cout << "Nome: " << m_nome << "\n";
         std::cout << "Matricula: " << m_matricula << "\n";
@@ -48,14 +48,14 @@ public:
         std::cout << "Vendedor " << m_nome << " cadastrado com sucesso!" << "\n";
     }
 
-    float CalcularSalario() const
+    float CalcularSalario() const override
     {
         return m_salarioBase + m_totalVendas*m_comissao/100;
     }
 
-    void Exibir() const
+    void Exibir() const override
     {
-        std::cout << "Vendedor: " << m_nome << "\n";
+        Funcionario::Exibir();
         std::cout << "Total vendas: R$ " << m_totalVendas << "\n";
         std::cout << "Comissão: " << m_comissao << "%" << "\n";
         std::cout << "Total salario: R$ " << CalcularSalario() << "\n";
@@ -75,12 +75,12 @@ public:
         std::cout << "Gerente " << m_nome << " cadastrado com sucesso!" << "\n";
     }
 
-    float CalcularSalario() const
+    float CalcularSalario() const override
     {
         return m_salarioBase + m_bonus;
     }
 
-    void Exibir() const
+    void Exibir() const override
     {
         Funcionario::Exibir();
         std::cout << "Bonus: R$ " << m_bonus << "\n";
