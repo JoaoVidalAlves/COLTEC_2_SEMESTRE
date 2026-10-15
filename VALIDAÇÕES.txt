@@ -36,6 +36,40 @@ int LerNumero(const char* mensagem, int minimo, int maximo)
     }
 }
 
+int LerNumero(const char* mensagem, int minimo)
+{
+    char entrada[100];
+    char* fim;
+    long valor;
+
+    while (1)
+    {
+        printf("%s", mensagem);
+
+        if (fgets(entrada, sizeof(entrada), stdin) == NULL)
+            continue;
+
+        entrada[strcspn(entrada, "\n")] = '\0';
+
+        valor = strtol(entrada, &fim, 10);
+
+        if (*entrada == '\0' || *fim != '\0')
+        {
+            printf("Entrada invalida. Digite apenas numeros.\n\n");
+            continue;
+        }
+
+        if (valor < minimo)
+        {
+            printf("Valor invalido - Min %d.\n\n",
+                minimo);
+            continue;
+        }
+
+        return (int)valor;
+    }
+}
+
 void LerTexto(const char* mensagem, char texto[], int tamanho)
 {
     while (1)
