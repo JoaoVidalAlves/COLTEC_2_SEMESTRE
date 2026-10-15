@@ -9,6 +9,8 @@
 #define CLEAR_COMMAND "clear"
 #endif
 
+#define MAX_FILHOS 10
+
 int LerNumero(const char* mensagem, int minimo)
 {
     char entrada[100];
@@ -82,7 +84,7 @@ int main()
 
     selecionarExercicio = LerNumero(
         "EXERCICIO ARVORES\n\n"
-        "1 = ARVORE BINARIA\n"
+        "1 = ARVORE HIERARQUICA\n"
         "Selecione: ", 1);
 
     switch (selecionarExercicio)
@@ -110,14 +112,15 @@ typedef struct No
 
 typedef struct Raiz
 {
-    struct No* inicio;
-    int tam;
+    struct No* inicio[MAX_FILHOS];
 } Raiz;
 
-void CriarArvoreB(Raiz* raiz)
+void CriarHI(Raiz* raiz)
 {
-    raiz->inicio = NULL;
-    raiz->tam = 0;
+    for (int i = 0, i < MAX_FILHOS, i++)
+    {
+        raiz->inicio[i] = NULL;
+    }
 }
 
 No* CriarNo(int valor)
@@ -134,7 +137,7 @@ No* CriarNo(int valor)
     return novo;
 }
 
-No* Inserir(No* no, int valor)
+No* InserirNoNo(No* no, int valor)
 {
     if (no == NULL)
         return CriarNo(valor);
@@ -143,17 +146,17 @@ No* Inserir(No* no, int valor)
         no->esq = Inserir(no->esq, valor);
     else
         no->dir = Inserir(no->dir, valor);
-
     return no;
 }
 
-void InserirNoAB(Raiz* raiz, int valor)
+void InserirNoHI(Raiz* raiz, int valor)
 {
-    raiz->inicio = Inserir(raiz->inicio, valor);
-    raiz->tam++;
+    int indice = valor / 10;
+
+    raiz->inicio[indice] = InserirNoNo(raiz->inicio[indice], valor);
 }
 
-void PercorrerAB(No* raiz)
+void PercorrerHI(No* raiz)
 {
     if (raiz != NULL)
     {
@@ -163,7 +166,7 @@ void PercorrerAB(No* raiz)
     }
 }
 
-void DestruirArvoreB(No* raiz) 
+void DestruirHI(No* raiz)
 {
     if (raiz == NULL)
         return;
@@ -172,7 +175,7 @@ void DestruirArvoreB(No* raiz)
     free(raiz);
 }
 
-int AlturaAB(No* raiz)
+int AlturaHI(No* raiz)
 {
     if (raiz == NULL)
         return -1;
@@ -187,7 +190,7 @@ int AlturaAB(No* raiz)
     }
 }
 
-int QuantidadeNosAB(No* raiz)
+int QuantidadeNosHI(No* raiz)
 {
     if (raiz == NULL)
         return 0;
@@ -195,7 +198,7 @@ int QuantidadeNosAB(No* raiz)
         return 1 + QuantidadeNosAB(raiz->esq) + QuantidadeNosAB(raiz->dir);
 }
 
-int QuantidadeFolhasAB(No* raiz)
+int QuantidadeFolhasHI(No* raiz)
 {
     if (raiz == NULL)
         return 0;
@@ -205,7 +208,7 @@ int QuantidadeFolhasAB(No* raiz)
         return QuantidadeFolhasAB(raiz->esq) + QuantidadeFolhasAB(raiz->dir);
 }
 
-No* RemoverSubAB(No* raiz, int valor)
+No* RemoverSubHI(No* raiz, int valor)
 {
     if (raiz == NULL)
     {
@@ -256,7 +259,7 @@ No* RemoverSubAB(No* raiz, int valor)
     }
 }
 
-int BuscaAB(No* raiz, int valor)
+int BuscaHI(No* raiz, int valor)
 {
     if (raiz == NULL)
     {
@@ -276,6 +279,7 @@ int BuscaAB(No* raiz, int valor)
         }
     }
 }
+
 void atividade()
 {
     system(CLEAR_COMMAND);
@@ -308,7 +312,7 @@ void atividade()
             {
                 system(CLEAR_COMMAND);
                 int valor = LerNumero("Digite o valor : ", 0);
-                InserirNoAB(&raiz, valor);
+                InserirNoHI(&raiz, valor);
             }
             break;
 
@@ -316,7 +320,7 @@ void atividade()
             {
                 system(CLEAR_COMMAND);
                 int valor = LerNumero("Digite o valor : ", 0);
-                RemoverSubAB(raiz.inicio, valor);
+                RemoverSubHI(raiz.inicio, valor);
             }
             break;
 
@@ -324,7 +328,7 @@ void atividade()
             {
                 system(CLEAR_COMMAND);
                 int valor = LerNumero("Digite o valor : ", 0);
-                if(BuscaAB(raiz.inicio, valor) != -1)
+                if(BuscaHI(raiz.inicio, valor) != -1)
                     printf("Valor %d encontrado na arvore!", BuscaAB(raiz.inicio, valor));
             }
             break;
@@ -332,35 +336,35 @@ void atividade()
             case 4:
             {
                 system(CLEAR_COMMAND);
-                PercorrerAB(raiz.inicio);
+                PercorrerHI(raiz.inicio);
             }
             break;
 
             case 5:
             {
                 system(CLEAR_COMMAND);
-                printf("Quantidade nos: %d", QuantidadeNosAB(raiz.inicio));
+                printf("Quantidade nos: %d", QuantidadeNosHI(raiz.inicio));
             }
             break;
 
             case 6:
             {
                 system(CLEAR_COMMAND);
-                printf("Quantidade nos: %d", QuantidadeFolhasAB(raiz.inicio));
+                printf("Quantidade nos: %d", QuantidadeFolhasHI(raiz.inicio));
             }
             break;
 
             case 7:
             {
                 system(CLEAR_COMMAND);
-                printf("Altura: %d", AlturaAB(raiz.inicio));
+                printf("Altura: %d", AlturaHI(raiz.inicio));
             }
             break;
 
             case 8:
             {
                 system(CLEAR_COMMAND);
-                DestruirArvoreB(raiz.inicio);
+                DestruirHI(raiz.inicio);
                 raiz.inicio = NULL;
                 raiz.tam = 0;
             }
@@ -374,6 +378,6 @@ void atividade()
         }
     } while (opcao != 0);
     
-    DestruirArvoreB(raiz.inicio);
+    DestruirHI(raiz.inicio);
     return;
 }
