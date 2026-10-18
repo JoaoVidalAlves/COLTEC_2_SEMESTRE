@@ -9,7 +9,6 @@
 #define CLEAR_COMMAND "clear"
 #endif
 
-#define MAX_FILHOS 10
 
 int LerNumero(const char* mensagem, int minimo)
 {
@@ -49,8 +48,8 @@ void atividade();
 typedef struct No
 {
     int valor;
-    struct No* filhos[MAX_FILHOS];
-    int quantidadeFilhos;
+    struct No* primeiroFilho;
+    struct No* proximoIrmao;
 } No;
 
 typedef struct Raiz
@@ -74,10 +73,8 @@ No* CriarNo(int valor)
     }
 
     novo->valor = valor;
-    novo->quantidadeFilhos = 0;
-
-    for (int i = 0; i < MAX_FILHOS; i++)
-        novo->filhos[i] = NULL;
+    novo->primeiroFilho = NULL;
+    novo->proximoIrmao = NULL;
 
     return novo;
 }
@@ -90,12 +87,16 @@ No* BuscaHI(No* raiz, int valor)
     if (raiz->valor == valor)
         return raiz;
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
+    No* filho = raiz->primeiroFilho;
+
+    while (filho != NULL)
     {
-        No* encontrado = BuscaHI(raiz->filhos[i], valor);
+        No* encontrado = BuscaHI(filho, valor);
 
         if (encontrado != NULL)
             return encontrado;
+
+        filho = filho->proximoIrmao;
     }
 
     return NULL;
@@ -129,19 +130,24 @@ int InserirNoHI(Raiz* raiz, int valorPai, int valor)
         return 0;
     }
 
-    if (pai->quantidadeFilhos >= MAX_FILHOS)
-    {
-        printf("O no pai ja possui %d filhos.\n", MAX_FILHOS);
-        return 0;
-    }
-
     No* novo = CriarNo(valor);
 
     if (novo == NULL)
         return 0;
 
-    pai->filhos[pai->quantidadeFilhos] = novo;
-    pai->quantidadeFilhos++;
+    if (pai->primeiroFilho == NULL)
+    {
+        pai->primeiroFilho = novo;
+    }
+    else
+    {
+        No* filho = pai->primeiroFilho;
+
+        while (filho->proximoIrmao != NULL)
+            filho = filho->proximoIrmao;
+
+        filho->proximoIrmao = novo;
+    }
 
     return 1;
 }
@@ -153,8 +159,13 @@ void PercorrerHI(No* raiz)
 
     printf("%d ", raiz->valor);
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
-        PercorrerHI(raiz->filhos[i]);
+    No* filho = raiz->primeiroFilho;
+
+    while (filho != NULL)
+    {
+        PercorrerHI(filho);
+        filho = filho->proximoIrmao;
+    }
 }
 
 void DestruirHI(No* raiz)
@@ -162,8 +173,15 @@ void DestruirHI(No* raiz)
     if (raiz == NULL)
         return;
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
-        DestruirHI(raiz->filhos[i]);
+    No* filho = raiz->primeiroFilho;
+
+    while (filho != NULL)
+    {
+        No* proximo = filho->proximoIrmao;
+        filho->proximoIrmao = NULL;
+        DestruirHI(filho);
+        filho = proximo;
+    }
 
     free(raiz);
 }
@@ -174,13 +192,16 @@ int AlturaHI(No* raiz)
         return -1;
 
     int maiorAltura = -1;
+    No* filho = raiz->primeiroFilho;
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
+    while (filho != NULL)
     {
-        int alturaFilho = AlturaHI(raiz->filhos[i]);
+        int alturaFilho = AlturaHI(filho);
 
         if (alturaFilho > maiorAltura)
             maiorAltura = alturaFilho;
+
+        filho = filho->proximoIrmao;
     }
 
     return maiorAltura + 1;
@@ -192,9 +213,13 @@ int QuantidadeNosHI(No* raiz)
         return 0;
 
     int total = 1;
+    No* filho = raiz->primeiroFilho;
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
-        total += QuantidadeNosHI(raiz->filhos[i]);
+    while (filho != NULL)
+    {
+        total += QuantidadeNosHI(filho);
+        filho = filho->proximoIrmao;
+    }
 
     return total;
 }
@@ -204,13 +229,17 @@ int QuantidadeFolhasHI(No* raiz)
     if (raiz == NULL)
         return 0;
 
-    if (raiz->quantidadeFilhos == 0)
+    if (raiz->primeiroFilho == NULL)
         return 1;
 
     int total = 0;
+    No* filho = raiz->primeiroFilho;
 
-    for (int i = 0; i < raiz->quantidadeFilhos; i++)
-        total += QuantidadeFolhasHI(raiz->filhos[i]);
+    while (filho != NULL)
+    {
+        total += QuantidadeFolhasHI(filho);
+        filho = filho->proximoIrmao;
+    }
 
     return total;
 }
@@ -222,33 +251,17 @@ int RemoverSubHI(No** raiz, int valor)
 
     if ((*raiz)->valor == valor)
     {
-        DestruirHI(*raiz);
-        *raiz = NULL;
+        No* removido = *raiz;
+        *raiz = removido->proximoIrmao;
+        removido->proximoIrmao = NULL;
+        DestruirHI(removido);
         return 1;
     }
 
-    No* pai = *raiz;
+    if (RemoverSubHI(&(*raiz)->primeiroFilho, valor))
+        return 1;
 
-    for (int i = 0; i < pai->quantidadeFilhos; i++)
-    {
-        if (pai->filhos[i]->valor == valor)
-        {
-            DestruirHI(pai->filhos[i]);
-
-            for (int j = i; j < pai->quantidadeFilhos - 1; j++)
-                pai->filhos[j] = pai->filhos[j + 1];
-
-            pai->quantidadeFilhos--;
-            pai->filhos[pai->quantidadeFilhos] = NULL;
-
-            return 1;
-        }
-
-        if (RemoverSubHI(&pai->filhos[i], valor))
-            return 1;
-    }
-
-    return 0;
+    return RemoverSubHI(&(*raiz)->proximoIrmao, valor);
 }
 
 void atividade()
