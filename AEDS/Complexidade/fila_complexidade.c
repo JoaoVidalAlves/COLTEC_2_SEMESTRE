@@ -154,3 +154,32 @@ int main(void) {
     }
     return 0;
 }
+
+/*
+
+Complexidade: Fila com Vetor vs Lista Encadeada
+
+| N         | Estrutura             | Inserção (ms) | Remoção (ms) 
+| 10        | Vetor circular        | 0,000079      | 0,000078 
+| 10        | Vetor c/ deslocamento | 0,000043      | 0,000062 
+| 10        | Lista encadeada       | 0,000096      | 0,000090 
+| 1.000     | Vetor circular        | 0,007         | 0,005 
+| 1.000     | Vetor c/ deslocamento | 0,003         | 0,028 
+| 1.000     | Lista encadeada       | 0,014         | 0,012
+| 10.000    | Vetor circular        | 0,062         | 0,060 
+| 10.000    | Vetor c/ deslocamento | 0,019         | 45,4
+| 10.000    | Lista encadeada       | 0,084         | 0,068 
+| 1.000.000 | Vetor circular        | 6,2           | 4,7 
+| 1.000.000 | Vetor c/ deslocamento | –             | não medido
+| 1.000.000 | Lista encadeada       | 22,4          | 9,0 
+
+## Análise e comparação
+
+Operações básicas e complexidade:
+
+| Estrutura              | Inserção | Remoção 
+| Vetor circular         | O(1)     | O(1)
+| Lista encadeada        | O(1)     | O(1) 
+| Vetor com deslocamento | O(1)     | O(n)
+
+*/
